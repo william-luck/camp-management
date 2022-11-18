@@ -35,41 +35,15 @@ User.create(username: 'camp_manager', password: 'test_password', email: 'managem
 
     # Create an account for the HH
     account = Account.create(user_id: 1, HH_id: household.id, funds: 0)
+    amount_multiplier = household.beneficiaries.count
 
-    # Create 10 distributions for each HH
-    # Distribution.create(
-    #     account_id: account.id,
-    #     amount: 
-    # )
-
-
-
-    # Create account for each of 20 HHs
-    # 20.times do |count|
-    #     account = Account.create(user_id: 1, HH_id: count + 1, funds: 0)
-    #     10.times do |count|
-    #         Distribution.create(
-    #             account_id: 
-    #         )
-    #     end
-    # end
-
-
+    # Create 10 distributions for the year for beneficiaries
+    10.times do |count| 
+        Distribution.create(
+            account_id: account.id,
+            amount: 12000 * amount_multiplier
+        )
+    end
 end
 
 
-
-
-
-# Create distribution
-
-
-
-
-
-
-
-
-# Random distributions
-
-# Random beneficiary
