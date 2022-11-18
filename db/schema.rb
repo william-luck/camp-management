@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_18_173348) do
+ActiveRecord::Schema.define(version: 2022_11_18_173904) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 2022_11_18_173348) do
     t.string "gender"
     t.date "DOB"
     t.string "phone_number"
-    t.integer "national_id_number"
+    t.string "national_id_number"
     t.boolean "head_of_HH"
     t.integer "household_id"
     t.datetime "created_at", precision: 6, null: false

@@ -19,7 +19,7 @@ User.create(username: 'camp_manager', password: 'test_password', email: 'managem
             phone_number: "+964-#{rand(100000000..9999999999)}",
             national_id_number: phone_number,
             head_of_HH: false,
-            HH_id: household.id
+            household_id: household.id
         )
     end
 
@@ -30,7 +30,7 @@ User.create(username: 'camp_manager', password: 'test_password', email: 'managem
             phone_number: phone_number,
             national_id_number: rand(100000000..9999999999),
             head_of_HH: true,
-            HH_id: household.id
+            household_id: household.id
         )
 
     # Create an account for the HH
