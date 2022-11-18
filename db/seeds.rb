@@ -34,7 +34,7 @@ User.create(username: 'camp_manager', password: 'test_password', email: 'managem
         )
 
     # Create an account for the HH
-    account = Account.create(user_id: 1, HH_id: household.id, funds: 0)
+    account = Account.create(user_id: 1, household_id: household.id, funds: 0)
     amount_multiplier = household.beneficiaries.count
 
     # Create 10 distributions for the year for beneficiaries
