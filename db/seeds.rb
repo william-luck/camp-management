@@ -1,5 +1,13 @@
 require 'faker'
 
+def generate_distribution_date(count)
+    if count < 9 
+        "2022-0#{count+1}-0#{rand(1..7)}"
+    else
+        "2022-#{count+1}-0#{rand(1..7)}"
+    end
+end
+
 
 
 # Create one user (camp manager)
@@ -38,10 +46,13 @@ User.create(username: 'camp_manager', password: 'test_password', email: 'managem
     amount_multiplier = household.beneficiaries.count
 
     # Create 10 distributions for the year for beneficiaries
+    
+    
     10.times do |count| 
         Distribution.create(
             account_id: account.id,
-            amount: 12000 * amount_multiplier
+            amount: 12000 * amount_multiplier, 
+            date: generate_distribution_date(count)
         )
     end
 end
