@@ -6,13 +6,13 @@ import { useState } from "react";
 
 
 
-function Login() {
+function Login({ setUser }) {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
     const [errors, setErrors] = useState([])
-    const [user, setUser] = useState('')
+    
 
 
     function handleSubmit(e) {
@@ -31,6 +31,7 @@ function Login() {
         }).then(response => {
             if (response.ok) {
                 response.json().then(user => setUser(user))
+                setErrors([])
             } else {
                 response.json().then(errors => setErrors(errors.errors))
             }
@@ -44,7 +45,7 @@ function Login() {
         <Form onSubmit={e => handleSubmit(e)}>
             <Form.Group className="mb-3">
                 <Form.Label>Email address</Form.Label>
-                <Form.Control type="email" placeholder="Enter email" value={username} onChange={e => setUsername(e.target.value)} />
+                <Form.Control type="username" placeholder="Enter username" value={username} onChange={e => setUsername(e.target.value)} />
             </Form.Group>
     
             <Form.Group className="mb-3">
