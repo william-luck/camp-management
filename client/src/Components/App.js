@@ -42,9 +42,6 @@ function App() {
         </Col>
         <Col><HouseholdList/></Col>
       </Row>
-      {/* <Row>
-        <Col xs={3}>Nav bar</Col>
-      </Row> */}
     </Container>
 
    
