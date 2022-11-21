@@ -1,3 +1,5 @@
 class AccountSerializer < ActiveModel::Serializer
-  attributes :id, :user_id, :HH_id, :funds
+  attributes :id, :funds
+
+  belongs_to :household
 end

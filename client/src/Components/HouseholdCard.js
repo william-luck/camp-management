@@ -7,9 +7,6 @@ function HouseholdCard({ household }) {
 
     const headOfHH = household.beneficiaries.filter(beneficiary => beneficiary.head_of_HH)[0]
 
-
-
-
     return (
         <>
         <Card>
@@ -17,8 +14,8 @@ function HouseholdCard({ household }) {
                 <Card.Title>Head of HH: {headOfHH.name}</Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">Date of entry: {household.date_of_entry}</Card.Subtitle>
                 <Card.Subtitle className="mb-2 text-muted">National ID number: {headOfHH.national_id_number}</Card.Subtitle>
-                <Card.Subtitle className="mb-2 text-muted">Household members:{household.beneficiaries.length}</Card.Subtitle>
-                <Card.Text>Funds in account: $0</Card.Text>
+                <Card.Subtitle className="mb-2 text-muted">Household members: {household.beneficiaries.length}</Card.Subtitle>
+                <Card.Text>Funds in account: {household.account.funds}</Card.Text>
             </Card.Body>
         </Card>
         <br></br>
