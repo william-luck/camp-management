@@ -17,9 +17,11 @@ function App() {
     })
   }, [])
 
+  if (!user) return <Login setUser={setUser} />
+
   return (
    <>
-   {!user ? <Login setUser={setUser}/> : 'Successfully logged in'}
+    Succesfully Logged In
    
    </> 
   )

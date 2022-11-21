@@ -1,20 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import { useState } from "react";
+import { useState, UseEffect } from "react";
+import Alert from 'react-bootstrap/Alert';
 
 
 
-function Login({ setUser }) {
+
+function Login({ setUser}) {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
     const [errors, setErrors] = useState([])
     
-
-
+    
     function handleSubmit(e) {
         // Prevent refresh
         e.preventDefault()
@@ -38,6 +39,11 @@ function Login({ setUser }) {
         })
     }
 
+    function errorMessage() {
+        <Alert variant="danger" onClose={() => setErrors('')} dismissible>{errors}</Alert>
+
+    }
+
 
     return (
         <>
@@ -53,9 +59,15 @@ function Login({ setUser }) {
                 <Form.Control type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}/>
             </Form.Group>
 
+            {errors.map(error => <Alert key={error} variant="danger" onClose={() => setErrors([])} dismissible>{error}</Alert>)}
+
             <Button variant="primary" type="submit">
                 Submit
             </Button>
+
+            
+
+            
         </Form>
         </Container>
 
