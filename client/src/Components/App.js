@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 import Login from "./Login";
+import UserInformation from "./UserInformation";
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -33,8 +34,8 @@ function App() {
 
     <Container>
       <Row>
-        <Col xs={3}>
-          User Information
+        <Col xs={4}>
+          <UserInformation user={user}/>
         </Col>
         <Col>HH information</Col>
       </Row>
