@@ -1,7 +1,11 @@
 import React from "react";
-import Login from "./Login";
-import Form from 'react-bootstrap/Form';
 import { useState, useEffect } from "react";
+
+import Login from "./Login";
+
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 
 function App() {
@@ -22,6 +26,23 @@ function App() {
   return (
    <>
     Succesfully Logged In
+    {/* Grid System */}
+    {/* User info */}
+    {/* Nav bar */}
+    {/* HH list with nested HH card */}
+
+    <Container>
+      <Row>
+        <Col xs={3}>
+          User Information
+        </Col>
+        <Col>HH information</Col>
+      </Row>
+      <Row>
+        <Col xs={3}>Nav bar</Col>
+      </Row>
+    </Container>
+
    
    </> 
   )

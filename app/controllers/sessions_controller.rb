@@ -8,8 +8,8 @@ class SessionsController < ApplicationController
             render json: user
         else
             # Return error as json if invalid username or password
-            render json: {errors: 'Username or password is incorrect'}
+            render json: {errors: ['Username or password is incorrect']}, status: :unauthorized
         end
-
     end
+    
 end
