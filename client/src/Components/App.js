@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 
 import Login from "./Login";
 import UserInformation from "./UserInformation";
+import HouseholdList from "./HouseholdList";
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -37,7 +38,7 @@ function App() {
         <Col xs={4}>
           <UserInformation user={user}/>
         </Col>
-        <Col>HH information</Col>
+        <Col><HouseholdList/></Col>
       </Row>
       <Row>
         <Col xs={3}>Nav bar</Col>
