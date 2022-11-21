@@ -27,7 +27,7 @@ function App() {
 
   return (
    <>
-    Succesfully Logged In
+    {/* Succesfully Logged In */}
     {/* Grid System */}
     {/* User info */}
     {/* Nav bar */}
@@ -37,12 +37,14 @@ function App() {
       <Row>
         <Col xs={4}>
           <UserInformation user={user}/>
+          <br></br>
+          Nav bar goes here
         </Col>
         <Col><HouseholdList/></Col>
       </Row>
-      <Row>
+      {/* <Row>
         <Col xs={3}>Nav bar</Col>
-      </Row>
+      </Row> */}
     </Container>
 
    
