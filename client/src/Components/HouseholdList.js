@@ -1,54 +1,28 @@
-import React from "react";
+import {React, useEffect, useState} from "react";
 
 import Card from 'react-bootstrap/Card';
 import Container from "react-bootstrap/esm/Container";
 
+import HouseholdCard from "./HouseholdCard";
+
 
 function HouseholdList() {
+
+    const [households, setHouseholds] = useState([])
+
+    useEffect(() => {
+        fetch('/households')
+            .then(response => response.json())
+            .then(households => setHouseholds(households))
+    }, [])
+
+    
 
     return (
         <div style={{maxHeight: '500px', overflowY: 'scroll'}}>
         <Container>
-        <Card>
-            <Card.Body>
-                <Card.Title>Household - Household ID</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">HH national ID number</Card.Subtitle>
-                <Card.Text>HH members</Card.Text>
-                <Card.Text>Funds in account</Card.Text>
-            </Card.Body>
-        </Card>
-        <br></br>
 
-        <Card>
-            <Card.Body>
-                <Card.Title>Logged in</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">as Camp Manager</Card.Subtitle>
-                <Card.Text>email</Card.Text>
-                <Card.Text>IDP camp, address</Card.Text>.
-            </Card.Body>
-        </Card>
-
-        <br></br>
-
-        <Card>
-            <Card.Body>
-                <Card.Title>Logged in</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">as Camp Manager</Card.Subtitle>
-                <Card.Text>email</Card.Text>
-                <Card.Text>IDP camp, address</Card.Text>.
-            </Card.Body>
-        </Card>
-
-        <br></br>
-
-        <Card>
-            <Card.Body>
-                <Card.Title>Logged in</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">as Camp Manager</Card.Subtitle>
-                <Card.Text>email</Card.Text>
-                <Card.Text>IDP camp, address</Card.Text>.
-            </Card.Body>
-        </Card>
+        {households.map(household => <HouseholdCard key={household.id} household={household}/>)}
 
         </Container>
         
