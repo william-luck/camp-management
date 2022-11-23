@@ -2,6 +2,10 @@ import {React, useEffect, useState} from "react";
 
 import Card from 'react-bootstrap/Card';
 import Container from "react-bootstrap/esm/Container";
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from "react-bootstrap/esm/Button";
+import Form from 'react-bootstrap/Form';
 
 import HouseholdCard from "./HouseholdCard";
 
@@ -9,6 +13,7 @@ import HouseholdCard from "./HouseholdCard";
 function HouseholdList() {
 
     const [households, setHouseholds] = useState([])
+    
 
     useEffect(() => {
         fetch('/households')
@@ -16,13 +21,36 @@ function HouseholdList() {
             .then(households => setHouseholds(households))
     }, [])
 
-    
 
+    
     return (
         <div style={{maxHeight: '500px', overflowY: 'scroll'}}>
         <Container>
+            <div style={{fontSize: 'x-large', display:'inline-block'}}>Distribute to Households in IDP Camp</div>
+            <div style={{float: 'right', display: 'inline-block'}}>
+                <Button>Distribute All</Button>
+            </div>
+            <p></p>
 
-        {households.map(household => <HouseholdCard key={household.id} household={household}/>)}
+            <Form>
+            
+            {households.map(household => {
+                return (
+                    <div key={household.id}>
+                {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                <Form.Check type="checkbox" onChange={(e) => console.log(e.target)}/>
+                </Form.Group> */}
+                <HouseholdCard key={household.id} household={household} />
+                    </div>
+                )
+            })}
+            
+            
+            </Form>
+
+            
+
+        
 
         </Container>
         

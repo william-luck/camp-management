@@ -1,4 +1,4 @@
-import {React, useState} from "react";
+import {React, useState, useEffect} from "react";
 
 import Card from 'react-bootstrap/Card';
 import Container from "react-bootstrap/esm/Container";
@@ -6,11 +6,18 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 
-function HouseholdCard({ household }) {
+function HouseholdCard({ household, defaultSelected }) {
 
-    const [selected, setSelected] = useState(false)
+    const [selected, setSelected] = useState(defaultSelected)
 
     const headOfHH = household.beneficiaries.filter(beneficiary => beneficiary.head_of_HH)[0]
+
+   
+
+
+
+
+    
 
     return (
         <>
@@ -22,11 +29,12 @@ function HouseholdCard({ household }) {
                 <br></br>
                 <br></br>
                 <Container>
-                <Form>
-                <Form.Group className="mb-3" controlId="formBasicCheckbox" onChange={console.log('clicked')}>
-                <Form.Check type="checkbox" onChange={() => setSelected(!selected)}/>
+                <Form.Group className="mb-3" controlId={`${household.id}`}>
+                <Form.Check type="checkbox" onChange={(e) => {
+                    setSelected(!selected) 
+                    console.log(e.target)
+                    }}/>
                 </Form.Group>
-                </Form>
                 </Container>
             </Col>
             <Col>
@@ -48,11 +56,9 @@ function HouseholdCard({ household }) {
                 <br></br>
                 <br></br>
                 <Container>
-                <Form>
-                <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                <Form.Group className="mb-3" controlId={`${household.id}`}>
                 <Form.Check type="checkbox" onChange={() => setSelected(!selected)}/>
                 </Form.Group>
-                </Form>
                 </Container>
             </Col>
             <Col>
