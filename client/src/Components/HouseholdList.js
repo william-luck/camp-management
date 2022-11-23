@@ -13,6 +13,7 @@ import HouseholdCard from "./HouseholdCard";
 function HouseholdList() {
 
     const [households, setHouseholds] = useState([])
+    const [selectedHouseholds, setSelectedHouseholds] = useState([])
     
 
     useEffect(() => {
@@ -36,12 +37,7 @@ function HouseholdList() {
             
             {households.map(household => {
                 return (
-                    <div key={household.id}>
-                {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" onChange={(e) => console.log(e.target)}/>
-                </Form.Group> */}
-                <HouseholdCard key={household.id} household={household} />
-                    </div>
+                <HouseholdCard key={household.id} household={household} selectedHouseholds={selectedHouseholds} setSelectedHouseholds={setSelectedHouseholds}/>
                 )
             })}
             

@@ -6,18 +6,13 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 
-function HouseholdCard({ household, defaultSelected }) {
+function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds }) {
 
-    const [selected, setSelected] = useState(defaultSelected)
+    const [selected, setSelected] = useState(false)
 
     const headOfHH = household.beneficiaries.filter(beneficiary => beneficiary.head_of_HH)[0]
 
-   
-
-
-
-
-    
+       
 
     return (
         <>
@@ -31,8 +26,13 @@ function HouseholdCard({ household, defaultSelected }) {
                 <Container>
                 <Form.Group className="mb-3" controlId={`${household.id}`}>
                 <Form.Check type="checkbox" onChange={(e) => {
+                    // Change appearance of box
                     setSelected(!selected) 
-                    console.log(e.target)
+                    // Remove household from array of selected households
+                    let tempSelected = [...selectedHouseholds]
+                    let index = tempSelected.indexOf(parseInt(e.target.id)-1)
+                    tempSelected.splice(index, 1)
+                    setSelectedHouseholds(tempSelected)
                     }}/>
                 </Form.Group>
                 </Container>
@@ -57,7 +57,14 @@ function HouseholdCard({ household, defaultSelected }) {
                 <br></br>
                 <Container>
                 <Form.Group className="mb-3" controlId={`${household.id}`}>
-                <Form.Check type="checkbox" onChange={() => setSelected(!selected)}/>
+                <Form.Check type="checkbox" onChange={(e) => {
+                    // Change appearnce of box
+                    setSelected(!selected)
+                    // Add household ID to array of selected households (for eventual POST to account)
+                    let tempSelected = [...selectedHouseholds]
+                    tempSelected.push(parseInt(e.target.id)-1)
+                    setSelectedHouseholds(tempSelected)
+                }}/>
                 </Form.Group>
                 </Container>
             </Col>
