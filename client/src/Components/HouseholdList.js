@@ -22,6 +22,20 @@ function HouseholdList() {
             .then(households => setHouseholds(households))
     }, [])
 
+    function handleSelectAll() {
+        // if all already selected, deselect all
+        if (selectedHouseholds.length === households.length) {
+            setSelectedHouseholds([])
+        } else {
+            // add all HHs to selected HH array
+            let tempSelected = []
+            for (let i=0; i < households.length; i++) {
+                tempSelected.push(i)
+            }
+            setSelectedHouseholds(tempSelected)
+        }
+    }
+
 
     
     return (
@@ -29,7 +43,7 @@ function HouseholdList() {
         <Container>
             <div style={{fontSize: 'x-large', display:'inline-block'}}>Distribute to Households in IDP Camp</div>
             <div style={{float: 'right', display: 'inline-block'}}>
-                <Button>Distribute All</Button>
+                <Button onClick={() => handleSelectAll()}>{selectedHouseholds.length === households.length ? 'Deselect All' : "Select All"}</Button>
             </div>
             <p></p>
 

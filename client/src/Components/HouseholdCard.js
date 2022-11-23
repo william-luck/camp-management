@@ -12,12 +12,16 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds })
 
     const headOfHH = household.beneficiaries.filter(beneficiary => beneficiary.head_of_HH)[0]
 
+    // When selected households change (upon select all), set selected status if household is in array of selected households 
+    // (will return true if select all)
+    useEffect(() => {
+        setSelected(selectedHouseholds.includes(household.id-1))
+    }, [selectedHouseholds])
        
 
     return (
         <>
-        {selected ? 
-        <Card border='primary' bg="info" text="white">
+        <Card border={selected ? 'dark' : null} bg={selected ? 'info' : null} text={selected ? "white" : null}>
         <Row>
             <Col xs={1}>
                 <br></br>
@@ -25,14 +29,24 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds })
                 <br></br>
                 <Container>
                 <Form.Group className="mb-3" controlId={`${household.id}`}>
-                <Form.Check type="checkbox" onChange={(e) => {
-                    // Change appearance of box
-                    setSelected(!selected) 
-                    // Remove household from array of selected households
-                    let tempSelected = [...selectedHouseholds]
-                    let index = tempSelected.indexOf(parseInt(e.target.id)-1)
-                    tempSelected.splice(index, 1)
-                    setSelectedHouseholds(tempSelected)
+                <Form.Check type="checkbox" checked={selected ? true : false} onChange={(e) => {
+                    if (selected) {
+                        // Change appearance of box
+                        setSelected(!selected) 
+                        // Remove household from array of selected households
+                        let tempSelected = [...selectedHouseholds]
+                        let index = tempSelected.indexOf(parseInt(e.target.id)-1)
+                        tempSelected.splice(index, 1)
+                        setSelectedHouseholds(tempSelected)
+                    } else {
+                        // Change appearnce of box
+                        setSelected(!selected)
+                        // Add household ID to array of selected households (for eventual POST to account)
+                        let tempSelected = [...selectedHouseholds]
+                        tempSelected.push(parseInt(e.target.id)-1)
+                        setSelectedHouseholds(tempSelected)
+                    }
+                    
                     }}/>
                 </Form.Group>
                 </Container>
@@ -40,45 +54,14 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds })
             <Col>
                 <Card.Body>
                 <Card.Title>Head of HH: {headOfHH.name}</Card.Title>
-                <Card.Subtitle className="mb-2" >Date of entry: {household.date_of_entry}</Card.Subtitle>
-                <Card.Subtitle className="mb-2">National ID number: {headOfHH.national_id_number}</Card.Subtitle>
-                <Card.Subtitle className="mb-2">Household members: {household.beneficiaries.length}</Card.Subtitle>
+                <Card.Subtitle className={selected ? "mb-2" : "mb-2 text-muted"} >Date of entry: {household.date_of_entry}</Card.Subtitle>
+                <Card.Subtitle className={selected ? "mb-2" : "mb-2 text-muted"}>National ID number: {headOfHH.national_id_number}</Card.Subtitle>
+                <Card.Subtitle className={selected ? "mb-2" : "mb-2 text-muted"}>Household members: {household.beneficiaries.length}</Card.Subtitle>
                 <Card.Text>Funds in account: {household.account.funds}</Card.Text>
                 </Card.Body>
             </Col>
         </Row>
         </Card>
-        : 
-        <Card>
-        <Row>
-            <Col xs={1}>
-                <br></br>
-                <br></br>
-                <br></br>
-                <Container>
-                <Form.Group className="mb-3" controlId={`${household.id}`}>
-                <Form.Check type="checkbox" onChange={(e) => {
-                    // Change appearnce of box
-                    setSelected(!selected)
-                    // Add household ID to array of selected households (for eventual POST to account)
-                    let tempSelected = [...selectedHouseholds]
-                    tempSelected.push(parseInt(e.target.id)-1)
-                    setSelectedHouseholds(tempSelected)
-                }}/>
-                </Form.Group>
-                </Container>
-            </Col>
-            <Col>
-                <Card.Body>
-                <Card.Title>Head of HH: {headOfHH.name}</Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">Date of entry: {household.date_of_entry}</Card.Subtitle>
-                <Card.Subtitle className="mb-2 text-muted">National ID number: {headOfHH.national_id_number}</Card.Subtitle>
-                <Card.Subtitle className="mb-2 text-muted">Household members: {household.beneficiaries.length}</Card.Subtitle>
-                <Card.Text>Funds in account: {household.account.funds}</Card.Text>
-                </Card.Body>
-            </Col>
-        </Row>
-        </Card>}
 
 
         
