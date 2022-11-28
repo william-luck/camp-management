@@ -43,27 +43,24 @@ function HouseholdList() {
         <Container>
             <div style={{fontSize: 'x-large', display:'inline-block'}}>Distribute to Households in IDP Camp</div>
             <div style={{float: 'right', display: 'inline-block'}}>
+                {selectedHouseholds.length > 0 ? <Button style={{ marginRight: "5px"}}>Distribute to Selected</Button> : null}
                 <Button onClick={() => handleSelectAll()}>{selectedHouseholds.length === households.length ? 'Deselect All' : "Select All"}</Button>
             </div>
             <p></p>
 
             <Form>
-            
             {households.map(household => {
                 return (
-                <HouseholdCard key={household.id} household={household} selectedHouseholds={selectedHouseholds} setSelectedHouseholds={setSelectedHouseholds}/>
+                <HouseholdCard 
+                    key={household.id} 
+                    household={household} 
+                    selectedHouseholds={selectedHouseholds} 
+                    setSelectedHouseholds={setSelectedHouseholds}
+                />
                 )
             })}
-            
-            
             </Form>
-
-            
-
-        
-
         </Container>
-        
         </div>
     )
 }

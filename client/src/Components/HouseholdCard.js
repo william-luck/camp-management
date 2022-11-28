@@ -5,10 +5,12 @@ import Container from "react-bootstrap/esm/Container";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
+import Button from "react-bootstrap/esm/Button";
 
 function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds }) {
 
     const [selected, setSelected] = useState(false)
+    const [distributionAmount, setDistributionAmount] = useState('12000')
 
     const headOfHH = household.beneficiaries.filter(beneficiary => beneficiary.head_of_HH)[0]
 
@@ -17,6 +19,19 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds })
     useEffect(() => {
         setSelected(selectedHouseholds.includes(household.id-1))
     }, [selectedHouseholds])
+
+    function handleDistribute() {
+
+        const newFunds = {funds: household.account.funds + parseInt(distributionAmount)}
+
+        fetch(`/accounts/${household.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+                body: JSON.stringify(newFunds)
+            })
+    }
        
 
     return (
@@ -59,6 +74,21 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds })
                 <Card.Subtitle className={selected ? "mb-2" : "mb-2 text-muted"}>Household members: {household.beneficiaries.length}</Card.Subtitle>
                 <Card.Text>Funds in account: {household.account.funds}</Card.Text>
                 </Card.Body>
+            </Col>
+            <Col xs={4}>
+            <br></br>
+            <br></br>
+            <br></br>
+            <Row>
+            <Col>
+                <Form.Control placeholder="amount" value={distributionAmount} onChange={e => setDistributionAmount(e.target.value)}style={{display: "inline-block"}}/>
+            </Col>
+            <Col>
+                <Button variant ="dark"style={{display: "inline-block"}} onClick={() => handleDistribute()}>Distribute</Button>
+            </Col>
+            
+            </Row>
+            
             </Col>
         </Row>
         </Card>

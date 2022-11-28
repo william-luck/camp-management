@@ -4,4 +4,5 @@ class HouseholdsController < ApplicationController
         households = Household.all
         render json: households
     end
+    
 end
