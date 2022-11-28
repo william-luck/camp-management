@@ -11,10 +11,10 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds })
 
     const [selected, setSelected] = useState(false)
     const [distributionAmount, setDistributionAmount] = useState('12000')
-    const [account, setAccount] = useState(household.account)
+    const [distributions, setDistributions] = useState(household.account.distributions)
 
     const headOfHH = household.beneficiaries.filter(beneficiary => beneficiary.head_of_HH)[0]
-    const uncollectedDistributions = household.account.distributions.filter(distribution => distribution.collected === false)
+    const uncollectedDistributions = distributions.filter(distribution => distribution.collected === false)
 
     // When selected households change (upon select all), set selected status if household is in array of selected households 
     // (will return true if select all)
@@ -39,7 +39,9 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds })
                 body: JSON.stringify(newDistribution)
             })
                 .then(response => response.json())
-                .then(account => setAccount(account))
+                .then(distribution => {
+                    setDistributions([...distributions, distribution])
+                })
             
     }
        
