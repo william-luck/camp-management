@@ -14,6 +14,7 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds })
     const [account, setAccount] = useState(household.account)
 
     const headOfHH = household.beneficiaries.filter(beneficiary => beneficiary.head_of_HH)[0]
+    const uncollectedDistributions = household.account.distributions.filter(distribution => distribution.collected === false)
 
     // When selected households change (upon select all), set selected status if household is in array of selected households 
     // (will return true if select all)
@@ -23,14 +24,19 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds })
 
     function handleDistribute() {
 
-        const newFunds = {funds: account.funds + (household.beneficiaries.length * parseInt(distributionAmount))}
+        const newDistribution = {
+            account_id: household.id,
+            amount: distributionAmount,
+            date: new Date().toJSON().slice(0, 10),
+            collected: false
+        }
 
-        fetch(`/accounts/${household.id}`, {
-            method: 'PATCH',
+        fetch(`/distribution/${household.id}`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-                body: JSON.stringify(newFunds)
+                body: JSON.stringify(newDistribution)
             })
                 .then(response => response.json())
                 .then(account => setAccount(account))
@@ -76,7 +82,7 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds })
                 <Card.Subtitle className={selected ? "mb-2" : "mb-2 text-muted"} >Date of entry: {household.date_of_entry}</Card.Subtitle>
                 <Card.Subtitle className={selected ? "mb-2" : "mb-2 text-muted"}>National ID number: {headOfHH.national_id_number}</Card.Subtitle>
                 <Card.Subtitle className={selected ? "mb-2" : "mb-2 text-muted"}>Household members: {household.beneficiaries.length}</Card.Subtitle>
-                <Card.Text>Funds in account: {account.funds}</Card.Text>
+                <Card.Text>Funds in account: {uncollectedDistributions.reduce((acc, dist) => acc + dist.amount, 0)}</Card.Text>
                 </Card.Body>
             </Col>
 

@@ -114,7 +114,7 @@ function HouseholdList() {
                     Success!
                 </Alert.Heading>
                 <p>
-                    You have distibuted {distributionAmount} IQD per HH member to {prevSelected.length} HHs. You distributed a total ofAccount balances have been updated.
+                    You have distibuted {distributionAmount} IQD per HH member to  HHs. You distributed a total ofAccount balances have been updated.
                 </p>
         </Alert>
     )
