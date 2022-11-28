@@ -57,18 +57,24 @@ function HouseholdList() {
             let tempHouseholds = [...households]
 
             let household = tempHouseholds[selectedHousehold]
-            let newFunds = {funds: household.account.funds + (household.beneficiaries.length * parseInt(distributionAmount))}
+
+            const newDistribution = {
+                account_id: household.id,
+                amount: household.beneficiaries.length * parseInt(distributionAmount),
+                date: new Date().toJSON().slice(0, 10),
+                collected: false
+            }
             
-            fetch(`/accounts/${selectedHousehold+1}`, {
-                method: 'PATCH',
+            fetch(`/distributions`, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                    body: JSON.stringify(newFunds)
+                    body: JSON.stringify(newDistribution)
                 })
                     .then(response => response.json())
-                    .then(account => {
-                        tempHouseholds[selectedHousehold].account.funds = account.funds
+                    .then(distribution => {
+                        tempHouseholds[selectedHousehold].account.distributions.push(distribution)
                         setHouseholds(tempHouseholds)
                     })
 

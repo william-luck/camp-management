@@ -26,12 +26,12 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds })
 
         const newDistribution = {
             account_id: household.id,
-            amount: distributionAmount,
+            amount: household.beneficiaries.length * parseInt(distributionAmount),
             date: new Date().toJSON().slice(0, 10),
             collected: false
         }
 
-        fetch(`/distribution/${household.id}`, {
+        fetch(`/distributions`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
