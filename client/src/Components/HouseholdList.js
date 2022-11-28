@@ -7,6 +7,9 @@ import Col from 'react-bootstrap/Col';
 import Button from "react-bootstrap/esm/Button";
 import Form from 'react-bootstrap/Form';
 
+import Alert from 'react-bootstrap/Alert';
+
+
 
 import Offcanvas from 'react-bootstrap/Offcanvas';
 
@@ -19,10 +22,8 @@ function HouseholdList() {
     const [selectedHouseholds, setSelectedHouseholds] = useState([])
     const [distributionAmount, setDistributionAmount] = useState('12000')
 
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [ocShow, setOcShow] = useState(false);
+    const [alertShow, setAlertShow] = useState(false)
     
 
     useEffect(() => {
@@ -45,10 +46,14 @@ function HouseholdList() {
         }
     }
 
-    function handleDistributeSelected() {
+    function handleDistributeSelected(e) {
+
+        e.preventDefault()
 
         for (const selectedHousehold of selectedHouseholds) {
-            let household = households[selectedHousehold]
+            let tempHouseholds = [...households]
+
+            let household = tempHouseholds[selectedHousehold]
             let newFunds = {funds: household.account.funds + (household.beneficiaries.length * parseInt(distributionAmount))}
             
             fetch(`/accounts/${selectedHousehold+1}`, {
@@ -58,13 +63,23 @@ function HouseholdList() {
                 },
                     body: JSON.stringify(newFunds)
                 })
+                    .then(response => response.json())
+                    .then(account => {
+                        tempHouseholds[selectedHousehold].account.funds = account.funds
+                        setHouseholds(tempHouseholds)
+                    })
+
+            // Clears selected households (none selected)
+            setSelectedHouseholds([])
+            setOcShow(false)
+            setAlertShow(true)
 
         }
 
     }
 
     const offCanvas = (
-        <Offcanvas show={show} onHide={handleClose} placement='bottom'>
+        <Offcanvas show={ocShow} onHide={() => setOcShow(false)} placement='bottom'>
             <Container>
             <Offcanvas.Header closeButton>
             <Offcanvas.Title as={'h2'}>Distribute to {selectedHouseholds.length} selected household{selectedHouseholds.length > 1 ? 's' : null}</Offcanvas.Title>
@@ -74,20 +89,34 @@ function HouseholdList() {
             </Offcanvas.Body>
             <Offcanvas.Body>
 
+            <Form>
             <Row>
                 <Col>
                     <Form.Control placeholder="amount" value={distributionAmount} onChange={(e) => setDistributionAmount(e.target.value)}style={{display: "inline-block"}}/>
                 </Col>
                 <Col>
-                    <Button variant ="dark" style={{display: "inline-block"}} onClick={handleDistributeSelected}>Distribute</Button>
+                    <Button variant ="dark" style={{display: "inline-block"}} onClick={handleDistributeSelected} type='submit'>Distribute</Button>
                 </Col>
             </Row>
-
-
+            </Form>
             </Offcanvas.Body>
+
             </Container>
         </Offcanvas>
     )
+
+    const alert = (
+        <Alert variant="success" dismissible onClose={() => setAlertShow(false)}>
+                <Alert.Heading>
+                    Success!
+                </Alert.Heading>
+                <p>
+                    Successfully distibuted {distributionAmount} IQD to selected HHs. Account balances have been updated.
+                </p>
+        </Alert>
+    )
+
+
 
 
     
@@ -96,10 +125,11 @@ function HouseholdList() {
         <Container>
             <div style={{fontSize: 'x-large', display:'inline-block'}}>Distribute to Households in IDP Camp</div>
             <div style={{float: 'right', display: 'inline-block'}}>
-                {selectedHouseholds.length > 0 ? <Button style={{ marginRight: "5px"}} onClick={handleShow}>Distribute to Selected</Button> : null }
+                {selectedHouseholds.length > 0 ? <Button style={{ marginRight: "5px"}} onClick={() => setOcShow(true)}>Distribute to Selected</Button> : null }
                 {offCanvas}
                 <Button onClick={() => handleSelectAll()}>{selectedHouseholds.length === households.length ? 'Deselect All' : "Select All"}</Button>
             </div>
+            {alertShow ? alert : null}
             <p></p>
 
             <div style={{maxHeight: '500px', overflowY: 'scroll'}}>
