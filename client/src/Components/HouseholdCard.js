@@ -11,6 +11,7 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds })
 
     const [selected, setSelected] = useState(false)
     const [distributionAmount, setDistributionAmount] = useState('12000')
+    const [account, setAccount] = useState(household.account)
 
     const headOfHH = household.beneficiaries.filter(beneficiary => beneficiary.head_of_HH)[0]
 
@@ -22,7 +23,7 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds })
 
     function handleDistribute() {
 
-        const newFunds = {funds: household.account.funds + parseInt(distributionAmount)}
+        const newFunds = {funds: account.funds + (household.beneficiaries.length * parseInt(distributionAmount))}
 
         fetch(`/accounts/${household.id}`, {
             method: 'PATCH',
@@ -31,6 +32,9 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds })
             },
                 body: JSON.stringify(newFunds)
             })
+                .then(response => response.json())
+                .then(account => setAccount(account))
+            
     }
        
 
@@ -72,24 +76,26 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds })
                 <Card.Subtitle className={selected ? "mb-2" : "mb-2 text-muted"} >Date of entry: {household.date_of_entry}</Card.Subtitle>
                 <Card.Subtitle className={selected ? "mb-2" : "mb-2 text-muted"}>National ID number: {headOfHH.national_id_number}</Card.Subtitle>
                 <Card.Subtitle className={selected ? "mb-2" : "mb-2 text-muted"}>Household members: {household.beneficiaries.length}</Card.Subtitle>
-                <Card.Text>Funds in account: {household.account.funds}</Card.Text>
+                <Card.Text>Funds in account: {account.funds}</Card.Text>
                 </Card.Body>
             </Col>
-            <Col xs={4}>
-            <br></br>
-            <br></br>
-            <br></br>
-            <Row>
-            <Col>
-                <Form.Control placeholder="amount" value={distributionAmount} onChange={e => setDistributionAmount(e.target.value)}style={{display: "inline-block"}}/>
-            </Col>
-            <Col>
-                <Button variant ="dark"style={{display: "inline-block"}} onClick={() => handleDistribute()}>Distribute</Button>
-            </Col>
+
             
-            </Row>
+                <Col xs={4}>
+                <br></br>
+                <br></br>
+                <br></br>
+                <Row>
+                <Col>
+                    <Form.Control placeholder="amount" value={distributionAmount} onChange={e => setDistributionAmount(e.target.value)} style={{display: "inline-block"}} disabled={selectedHouseholds.length > 0 ? true : false}/>
+                </Col>
+                <Col>
+                    <Button variant ="dark"style={{display: "inline-block"}} onClick={() => handleDistribute()} disabled={selectedHouseholds.length > 0 ? true : false}>Distribute</Button>
+                </Col>
+                </Row>
+                </Col>
+        
             
-            </Col>
         </Row>
         </Card>
 
