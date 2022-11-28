@@ -52,7 +52,8 @@ User.create(username: 'camp_manager', password: 'test_password', email: 'managem
         Distribution.create(
             account_id: account.id,
             amount: 12000 * amount_multiplier, 
-            date: generate_distribution_date(count)
+            date: generate_distribution_date(count),
+            collected: true
         )
     end
 end
