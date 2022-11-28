@@ -20,6 +20,7 @@ function HouseholdList() {
 
     const [households, setHouseholds] = useState([])
     const [selectedHouseholds, setSelectedHouseholds] = useState([])
+    const [prevDistributionInformation, setPrevSelected] = useState({})
     const [distributionAmount, setDistributionAmount] = useState('12000')
 
     const [ocShow, setOcShow] = useState(false);
@@ -49,6 +50,8 @@ function HouseholdList() {
     function handleDistributeSelected(e) {
 
         e.preventDefault()
+
+        setPrevSelected([...selectedHouseholds])
 
         for (const selectedHousehold of selectedHouseholds) {
             let tempHouseholds = [...households]
@@ -111,7 +114,7 @@ function HouseholdList() {
                     Success!
                 </Alert.Heading>
                 <p>
-                    Successfully distibuted {distributionAmount} IQD to selected HHs. Account balances have been updated.
+                    You have distibuted {distributionAmount} IQD per HH member to {prevSelected.length} HHs. You distributed a total ofAccount balances have been updated.
                 </p>
         </Alert>
     )
