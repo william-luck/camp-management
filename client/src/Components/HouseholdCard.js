@@ -14,6 +14,8 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
     const [distributionAmount, setDistributionAmount] = useState('12000')
     const [distributions, setDistributions] = useState(household.account.distributions)
 
+    const [individualAlert, setIndividualAlert] = useState(false)
+
     const headOfHH = household.beneficiaries.filter(beneficiary => beneficiary.head_of_HH)[0]
     const uncollectedDistributions = distributions.filter(distribution => distribution.collected === false)
 
@@ -21,6 +23,7 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
     // (will return true if select all)
     useEffect(() => {
         setSelected(selectedHouseholds.includes(household.id-1))
+
     }, [selectedHouseholds])
 
     function handleDistribute() {
@@ -42,8 +45,13 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
                 .then(response => response.json())
                 .then(distribution => {
                     setDistributions([...distributions, distribution])
+                    setIndividualAlert(distribution.amount)
                 })
             
+    }
+
+    function displayIndividualAlert() {
+        setTimeout(() => setIndividualAlert(false), 3000)
     }
        
 
@@ -88,6 +96,8 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
                 <Card.Text>
                     Funds in account: {uncollectedDistributions.reduce((acc, dist) => acc + dist.amount, 0)}
                     {' '}{alertShow && distributionEvent.includes(household.id-1) ? <Badge bg="success"> +{multipleDistributionAmount * household.beneficiaries.length} IQD</Badge> : null}
+                         {individualAlert ? <Badge bg="success"> +{individualAlert} IQD</Badge> : null} 
+                         {individualAlert ? displayIndividualAlert() : null}
                 </Card.Text>
                 </Card.Body>
             </Col>
