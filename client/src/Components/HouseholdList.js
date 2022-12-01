@@ -1,14 +1,11 @@
 import {React, useEffect, useState} from "react";
 
-import Card from 'react-bootstrap/Card';
+
 import Container from "react-bootstrap/esm/Container";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from "react-bootstrap/esm/Button";
 import Form from 'react-bootstrap/Form';
-
-import Alert from 'react-bootstrap/Alert';
-
 
 
 import Offcanvas from 'react-bootstrap/Offcanvas';
@@ -51,6 +48,7 @@ function HouseholdList() {
 
     function handleDistributeSelected(e) {
 
+        // Makes a copy of the selected household array indexes, for calculating distribution totals in alert
         setDistributionEvent([...selectedHouseholds])
 
         e.preventDefault()
@@ -117,12 +115,6 @@ function HouseholdList() {
 
 
 
-    
-
-
-
-
-    
     return (
         <div>
         <Container>
@@ -144,6 +136,9 @@ function HouseholdList() {
                     household={household} 
                     selectedHouseholds={selectedHouseholds} 
                     setSelectedHouseholds={setSelectedHouseholds}
+                    alertShow={alertShow}
+                    multipleDistributionAmount={distributionAmount}
+                    distributionEvent={distributionEvent}
                 />
                 )
             })}

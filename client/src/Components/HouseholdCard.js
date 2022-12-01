@@ -6,8 +6,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from "react-bootstrap/esm/Button";
+import Badge from 'react-bootstrap/Badge';
 
-function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds }) {
+function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, alertShow, multipleDistributionAmount, distributionEvent }) {
 
     const [selected, setSelected] = useState(false)
     const [distributionAmount, setDistributionAmount] = useState('12000')
@@ -84,7 +85,10 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds })
                 <Card.Subtitle className={selected ? "mb-2" : "mb-2 text-muted"} >Date of entry: {household.date_of_entry}</Card.Subtitle>
                 <Card.Subtitle className={selected ? "mb-2" : "mb-2 text-muted"}>National ID number: {headOfHH.national_id_number}</Card.Subtitle>
                 <Card.Subtitle className={selected ? "mb-2" : "mb-2 text-muted"}>Household members: {household.beneficiaries.length}</Card.Subtitle>
-                <Card.Text>Funds in account: {uncollectedDistributions.reduce((acc, dist) => acc + dist.amount, 0)}</Card.Text>
+                <Card.Text>
+                    Funds in account: {uncollectedDistributions.reduce((acc, dist) => acc + dist.amount, 0)}
+                    {' '}{alertShow && distributionEvent.includes(household.id-1) ? <Badge bg="success"> +{multipleDistributionAmount * household.beneficiaries.length} IQD</Badge> : null}
+                </Card.Text>
                 </Card.Body>
             </Col>
 
