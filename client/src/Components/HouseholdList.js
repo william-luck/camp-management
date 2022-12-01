@@ -14,17 +14,19 @@ import Alert from 'react-bootstrap/Alert';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 
 import HouseholdCard from "./HouseholdCard";
+import SuccessAlert from "./SuccessAlert";
 
 
 function HouseholdList() {
 
     const [households, setHouseholds] = useState([])
     const [selectedHouseholds, setSelectedHouseholds] = useState([])
-    const [prevDistributionInformation, setPrevSelected] = useState({})
-    const [distributionAmount, setDistributionAmount] = useState('12000')
 
+    const [distributionEvent, setDistributionEvent] = useState([])
+    const [distributionAmount, setDistributionAmount] = useState('12000')
     const [ocShow, setOcShow] = useState(false);
     const [alertShow, setAlertShow] = useState(false)
+
     
 
     useEffect(() => {
@@ -49,13 +51,13 @@ function HouseholdList() {
 
     function handleDistributeSelected(e) {
 
+        setDistributionEvent([...selectedHouseholds])
+
         e.preventDefault()
 
-        setPrevSelected([...selectedHouseholds])
 
         for (const selectedHousehold of selectedHouseholds) {
             let tempHouseholds = [...households]
-
             let household = tempHouseholds[selectedHousehold]
 
             const newDistribution = {
@@ -78,13 +80,12 @@ function HouseholdList() {
                         setHouseholds(tempHouseholds)
                     })
 
-            // Clears selected households (none selected)
-            setSelectedHouseholds([])
-            setOcShow(false)
-            setAlertShow(true)
-
         }
 
+        setSelectedHouseholds([])
+        setOcShow(false)
+        setAlertShow(true)
+        
     }
 
     const offCanvas = (
@@ -114,16 +115,9 @@ function HouseholdList() {
         </Offcanvas>
     )
 
-    const alert = (
-        <Alert variant="success" dismissible onClose={() => setAlertShow(false)}>
-                <Alert.Heading>
-                    Success!
-                </Alert.Heading>
-                <p>
-                    You have distibuted {distributionAmount} IQD per HH member to  HHs. You distributed a total ofAccount balances have been updated.
-                </p>
-        </Alert>
-    )
+
+
+    
 
 
 
@@ -138,7 +132,7 @@ function HouseholdList() {
                 {offCanvas}
                 <Button onClick={() => handleSelectAll()}>{selectedHouseholds.length === households.length ? 'Deselect All' : "Select All"}</Button>
             </div>
-            {alertShow ? alert : null}
+            {alertShow ? <SuccessAlert setAlertShow={setAlertShow} distributionAmount={distributionAmount} distributionEvent={distributionEvent} households={households}/> : null}
             <p></p>
 
             <div style={{maxHeight: '500px', overflowY: 'scroll'}}>
