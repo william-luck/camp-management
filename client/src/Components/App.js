@@ -8,6 +8,8 @@ import HouseholdList from "./HouseholdList";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { BrowserRouter, Route } from "react-router-dom";
+import NavBar from "./NavBar";
 
 
 function App() {
@@ -38,9 +40,16 @@ function App() {
         <Col xs={4}>
           <UserInformation user={user}/>
           <br></br>
-          Nav bar goes here
+          <NavBar/>
         </Col>
-        <Col><HouseholdList/></Col>
+        <Col>
+          <Route exact path='/'>
+            <HouseholdList/>
+          </Route>
+          <Route path='/edit-hhs'>
+            Test
+          </Route>
+        </Col>
       </Row>
     </Container>
 
