@@ -10,6 +10,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { BrowserRouter, Route } from "react-router-dom";
 import NavBar from "./NavBar";
+import EditHouseholds from "./EditHouseholds";
 
 
 function App() {
@@ -47,7 +48,7 @@ function App() {
             <HouseholdList/>
           </Route>
           <Route path='/edit-hhs'>
-            Test
+            <EditHouseholds/>
           </Route>
         </Col>
       </Row>
