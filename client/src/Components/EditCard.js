@@ -27,6 +27,13 @@ function EditCard({ household }) {
         setNationalIdNumberValue(beneficiary.national_id_number)
         setPhoneNumberValue(beneficiary.phone_number)
     }
+
+    function handleAddressSubmit(e) {
+        e.preventDefault()
+        
+        
+
+    }
     
 
     
@@ -131,7 +138,7 @@ function EditCard({ household }) {
                 <Collapse in={addressShow}>
                     <div id="edit-address">
                         <Card.Body>
-                        <Form>
+                        <Form onSubmit={handleAddressSubmit}>
                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Label>Address</Form.Label>
                                 <Form.Control placeholder="address" value={addressValue} onChange={e => setAddressValue(e.target.value)}/>

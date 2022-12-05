@@ -4,5 +4,17 @@ class HouseholdsController < ApplicationController
         households = Household.all
         render json: households, include: ['beneficiaries', 'count', 'account.distributions']
     end
+
+    def update
+        household = Household.find(params[:id])
+        household.update!(household_params)
+        render json: household, status: :accepted
+    end
+
+    private
+
+    def household_params
+        params.permit(:address)
+    end
     
 end
