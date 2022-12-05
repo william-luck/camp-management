@@ -14,9 +14,9 @@ import HouseholdCard from "./HouseholdCard";
 import SuccessAlert from "./SuccessAlert";
 
 
-function HouseholdList() {
+function HouseholdList({ households, setHouseholds }) {
 
-    const [households, setHouseholds] = useState([])
+  
     const [selectedHouseholds, setSelectedHouseholds] = useState([])
 
     const [distributionEvent, setDistributionEvent] = useState([])
@@ -26,11 +26,11 @@ function HouseholdList() {
 
     
 
-    useEffect(() => {
-        fetch('/households')
-            .then(response => response.json())
-            .then(households => setHouseholds(households))
-    }, [])
+    // useEffect(() => {
+    //     fetch('/households')
+    //         .then(response => response.json())
+    //         .then(households => setHouseholds(households))
+    // }, [])
 
     function handleSelectAll() {
         // if all already selected, deselect all
@@ -127,7 +127,7 @@ function HouseholdList() {
             {alertShow ? <SuccessAlert setAlertShow={setAlertShow} distributionAmount={distributionAmount} distributionEvent={distributionEvent} households={households}/> : null}
             <p></p>
 
-            <div style={{maxHeight: '500px', overflowY: 'scroll'}}>
+            <div style={{maxHeight: '725px', overflowY: 'scroll'}}>
             <Form>
             {households.map(household => {
                 return (

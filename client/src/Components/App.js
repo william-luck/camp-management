@@ -16,12 +16,16 @@ import EditHouseholds from "./EditHouseholds";
 function App() {
 
   const [user, setUser] = useState('')
+  const [households, setHouseholds] = useState([])
 
   // Checks if already logged-in user on page load
   useEffect(() => {
     fetch('/me').then(response => {
       if (response.ok) {
         response.json().then(user => setUser(user))
+        fetch('/households')
+            .then(r => r.json())
+            .then(households => setHouseholds(households))
       } 
     })
   }, [])
@@ -30,11 +34,7 @@ function App() {
 
   return (
    <>
-    {/* Succesfully Logged In */}
-    {/* Grid System */}
-    {/* User info */}
-    {/* Nav bar */}
-    {/* HH list with nested HH card */}
+
 
     <Container>
       <Row>
@@ -45,10 +45,10 @@ function App() {
         </Col>
         <Col>
           <Route exact path='/'>
-            <HouseholdList/>
+            <HouseholdList households={households} setHouseholds={setHouseholds}/>
           </Route>
           <Route path='/edit-hhs'>
-            <EditHouseholds/>
+            <EditHouseholds households={households}/>
           </Route>
         </Col>
       </Row>

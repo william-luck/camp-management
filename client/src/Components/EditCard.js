@@ -10,11 +10,27 @@ import Form from 'react-bootstrap/Form';
 import Accordion from 'react-bootstrap/Accordion';
 
 
-function EditCard() {
+function EditCard({ household }) {
 
-    const [headOfHH, setHeadOfHH] = useState(false);
-    const [address, setAddress] = useState(false)
-    const [householdInfo, setHouseholdInfo] = useState(false)
+    const [headOfHHShow, setHeadOfHHShow] = useState(false);
+    const [addressShow, setAddressShow] = useState(false)
+    const [householdInfoShow, setHouseholdInfoShow] = useState(false)
+
+    let headOfHousehold = household.beneficiaries.find(beneficiary => beneficiary.head_of_HH)
+
+    const [headOfHHValue, setHeadOfHHValue] = useState(headOfHousehold.name)
+    const [addressValue, setAddressValue] = useState(household.address)
+    const [nationalIdNumberValue, setNationalIdNumberValue] = useState('')
+    const [phoneNumberValue, setPhoneNumberValue] = useState('')
+
+    function handleIDandAddressClick(beneficiary) {
+        setNationalIdNumberValue(beneficiary.national_id_number)
+        setPhoneNumberValue(beneficiary.phone_number)
+    }
+    
+
+    
+    
 
 
     return (
@@ -26,19 +42,19 @@ function EditCard() {
                 
                 <Col xs={5}>
                     <Card.Body>
-                        <Card.Title style={{display: 'inline-block'}}>Head of HH: Name
+                        <Card.Title style={{display: 'inline-block'}}>Head of HH: {headOfHousehold.name}
                         {' '}
                         <Button 
                             variant="link"
-                            onClick={() => setHeadOfHH(!headOfHH)}
+                            onClick={() => setHeadOfHHShow(!headOfHHShow)}
                             aria-controls="example-collapse-text"
-                            aria-expanded={headOfHH}
+                            aria-expanded={headOfHHShow}
                             style={{display: "inline-block"}}
                             size='sm'
-                        >{!headOfHH ? 'Edit' : 'Hide'}</Button>
+                        >{!headOfHHShow ? 'Edit' : 'Hide'}</Button>
                         </Card.Title>
-                        <Card.Subtitle className="mb-2 text-muted">National ID number: 858493855</Card.Subtitle>
-                        <Card.Subtitle className="mb-2 text-muted">Phone Number: +9643830248</Card.Subtitle>
+                        <Card.Subtitle className="mb-2 text-muted">National ID number: {headOfHousehold.national_id_number}</Card.Subtitle>
+                        <Card.Subtitle className="mb-2 text-muted">Phone Number: {headOfHousehold.phone_number}</Card.Subtitle>
                         
                     </Card.Body>
                 </Col>
@@ -50,14 +66,14 @@ function EditCard() {
                         <Card.Subtitle className="mb-2 text-muted">Address</Card.Subtitle>
                         {' '}
                        
-                        <Card.Title style={{display: 'inline-block'}}>23C
+                        <Card.Title style={{display: 'inline-block'}}>{household.address}
                         <Button 
                             variant="link"
-                            onClick={() => setAddress(!address)}
+                            onClick={() => setAddressShow(!addressShow)}
                             aria-controls="edit-address"
-                            aria-expanded={address}
+                            aria-expanded={addressShow}
                             style={{display: 'inline-block'}}
-                        >{!address ? 'Edit' : 'Hide'}</Button>
+                        >{!addressShow ? 'Edit' : 'Hide'}</Button>
                         </Card.Title>
                         
                     </Card.Body>
@@ -66,15 +82,15 @@ function EditCard() {
                 <Col>
                     <Card.Body>
                         <Card.Subtitle className="mb-2 text-muted">HH members</Card.Subtitle>
-                        <Card.Title style={{display: 'inline-block'}}>7</Card.Title>
+                        <Card.Title style={{display: 'inline-block'}}>{household.beneficiaries.length}</Card.Title>
                         {' '}
                         <Button 
                             variant="link"
-                            onClick={() => setHouseholdInfo(!householdInfo)}
+                            onClick={() => setHouseholdInfoShow(!householdInfoShow)}
                             aria-controls="edit-household-information"
-                            aria-expanded={householdInfo}
+                            aria-expanded={householdInfoShow}
                             style={{display: 'inline-block'}}
-                        >{!householdInfo ? 'Expand' : 'Hide'}</Button>
+                        >{!householdInfoShow ? 'Expand' : 'Hide'}</Button>
                         
                         
                     </Card.Body>
@@ -82,19 +98,23 @@ function EditCard() {
             </Row>
             <Row>
                 <Col>
-
-                <Collapse in={headOfHH}>
+                
+                {/* Edit head of HH */}
+                <Collapse in={headOfHHShow}>
                     <div id="example-collapse-text">
                         <Card.Body>
             
                         <Form>
                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Label>Head of HH</Form.Label>
-                                <Form.Select aria-label="Default select example">
-                                <option>Default HH member</option>
+                                <Form.Select aria-label="Default select example" onChange={(e) => setHeadOfHHValue(e.target.value)}>
+                                {/* <option>Default HH member</option>
                                 <option value="1">Name (gender)</option>
                                 <option value="2">Name (gender)</option>
-                                <option value="3">Name (gender)</option>
+                                <option value="3">Name (gender)</option> */}
+                                {household.beneficiaries.map(beneficiary => {
+                                    return <option value={beneficiary.name}>{beneficiary.name}</option>
+                                })}
                                 </Form.Select>
                             </Form.Group>
 
@@ -107,13 +127,14 @@ function EditCard() {
                     </div>
                 </Collapse>
 
-                <Collapse in={address}>
+                {/* Edit address */}
+                <Collapse in={addressShow}>
                     <div id="edit-address">
                         <Card.Body>
                         <Form>
                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Label>Address</Form.Label>
-                                <Form.Control placeholder="address" value={'23C'}/>
+                                <Form.Control placeholder="address" value={addressValue} onChange={e => setAddressValue(e.target.value)}/>
                             </Form.Group>
 
                             <Button variant="primary" type="submit">
@@ -124,41 +145,37 @@ function EditCard() {
                     </div>
                 </Collapse>
 
-                <Collapse in={householdInfo}>
+                {/* Edit beneficiaries in HH */}
+                <Collapse in={householdInfoShow}>
                     <div id="edit-household-information">
-                        {/* <Card.Body>
-                        <Card.Text>
-                            Edit head of HH information here
-                        </Card.Text>
-                        </Card.Body> */}
+                        
                         <Accordion>
                             {/* Map Accordian Items according to HH member  */}
-                            <Accordion.Item eventKey="0">
-                                <Accordion.Header>Beneficiary name (head of HH)</Accordion.Header>
-                                <Accordion.Body>
-                                <Form>
-                                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                                        <Form.Label>National ID number</Form.Label>
-                                        <Form.Control placeholder="address" value={'857393875'}/>
-                                    </Form.Group>
+                            {household.beneficiaries.sort((a,b) => Number(b.head_of_HH) - Number(a.head_of_HH)).map(beneficiary => {
+                                return (
+                                    <Accordion.Item eventKey={beneficiary.id} onClick={() => handleIDandAddressClick(beneficiary)}>
+                                        <Accordion.Header>{beneficiary.name} ({beneficiary.gender}) {beneficiary.head_of_HH ? '--Head of Household' : null}</Accordion.Header>
+                                        <Accordion.Body>
+                                        <Form>
+                                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                                                <Form.Label>National ID number</Form.Label>
+                                                <Form.Control placeholder="address" value={nationalIdNumberValue}/>
+                                            </Form.Group>
 
-                                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                                        <Form.Label>Phone number</Form.Label>
-                                        <Form.Control placeholder="address" value={'+96495739729'}/>
-                                    </Form.Group>
+                                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                                                <Form.Label>Phone number</Form.Label>
+                                                <Form.Control placeholder="address" value={phoneNumberValue}/>
+                                            </Form.Group>
 
-                                    <Button variant="primary" type="submit">
-                                        Save
-                                    </Button>
-                                </Form>
-                                </Accordion.Body>
-                            </Accordion.Item>
-                            <Accordion.Item eventKey="1">
-                                <Accordion.Header>Beneficiariy name (gender)</Accordion.Header>
-                                <Accordion.Body>
-                                Other Form
-                                </Accordion.Body>
-                            </Accordion.Item>
+                                            <Button variant="primary" type="submit">
+                                                Save
+                                            </Button>
+                                        </Form>
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+                                    
+                                )
+                            })}
                         </Accordion>
                     </div>
                 </Collapse>
@@ -169,6 +186,8 @@ function EditCard() {
             </Row>
             
             </Card>
+
+            <br></br>
             
 
     
