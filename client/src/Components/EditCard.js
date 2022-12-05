@@ -62,10 +62,11 @@ function EditCard({ household }) {
     function handleHeadOfHouseholdSubmit(e) { 
         e.preventDefault()
         
-        let beneficiary = household.beneficiaries.find(beneficiary => beneficiary.name === headOfHHValue)
+        let newHead = household.beneficiaries.find(beneficiary => beneficiary.name === headOfHHValue)
         let change = {head_of_HH: true}
 
-        fetch(`/beneficiaries/${beneficiary.id}`, {
+        // For changing head of household status to selected beneficiary
+        fetch(`/beneficiaries/${newHead.id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
@@ -76,15 +77,29 @@ function EditCard({ household }) {
                 .then(changedBeneficiary=> {
                     setHeadOfHHShow(false)
                     console.log(changedBeneficiary)
-
-                    // household.address = changedHousehold.address
-                    // setAddressConfirm(true)
-                    // setTimeout(() => setAddressConfirm(false), 3000)
-                    
+                    return changedBeneficiary
                 })
+                .then(changedBeneficiary => {
+                    // Filters by head of HH (should be two), then second criterion of selecting the beneficiary who was not changed as part of the previous fetch (the previous head of HH)
+                    let previousHeadOfHousehold = household.beneficiaries.filter(beneficiary => beneficiary.head_of_HH && beneficiary.id !== changedBeneficiary.id)[0]
+                    let newChange = {head_of_HH: false}
+                    fetch(`/beneficiaries/${previousHeadOfHousehold.id}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                            body: JSON.stringify(newChange)
+                        })
+                            .then(response => response.json())
+                            .then(previousHead => console.log(previousHead))
+                    })
+                    
+                }
         
+          
+
         
-    }
+    
     
 
     

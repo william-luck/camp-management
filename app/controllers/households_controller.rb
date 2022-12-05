@@ -4,6 +4,12 @@ class HouseholdsController < ApplicationController
         households = Household.all
         render json: households, include: ['beneficiaries', 'count', 'account.distributions']
     end
+    
+    def show 
+        household = Household.find(params[:id])
+        render json: household, status: :ok
+
+    end
 
     def update
         household = Household.find(params[:id])
