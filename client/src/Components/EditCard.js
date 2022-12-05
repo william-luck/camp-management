@@ -8,6 +8,7 @@ import Button from "react-bootstrap/esm/Button";
 import { useState } from "react";
 import Form from 'react-bootstrap/Form';
 import Accordion from 'react-bootstrap/Accordion';
+import Badge from 'react-bootstrap/Badge';
 
 
 function EditCard({ household }) {
@@ -15,6 +16,7 @@ function EditCard({ household }) {
     const [headOfHHShow, setHeadOfHHShow] = useState(false);
     const [addressShow, setAddressShow] = useState(false)
     const [householdInfoShow, setHouseholdInfoShow] = useState(false)
+    const [addressConfirm, setAddressConfirm] = useState(false)
 
     let headOfHousehold = household.beneficiaries.find(beneficiary => beneficiary.head_of_HH)
 
@@ -23,6 +25,8 @@ function EditCard({ household }) {
     const [nationalIdNumberValue, setNationalIdNumberValue] = useState('')
     const [phoneNumberValue, setPhoneNumberValue] = useState('')
 
+
+
     function handleIDandAddressClick(beneficiary) {
         setNationalIdNumberValue(beneficiary.national_id_number)
         setPhoneNumberValue(beneficiary.phone_number)
@@ -30,8 +34,27 @@ function EditCard({ household }) {
 
     function handleAddressSubmit(e) {
         e.preventDefault()
+
+        let addressUpdate = {address: addressValue}
+
+        fetch(`/households/${household.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+                body: JSON.stringify(addressUpdate)
+            })
+                .then(response => response.json())
+                .then(changedHousehold=> {
+                    // I want the address button to disband
+                    setAddressShow(false)
+                    household.address = changedHousehold.address
+                    setAddressConfirm(true)
+                    setTimeout(() => setAddressConfirm(false), 3000)
+                    
+                })
         
-        
+
 
     }
     
@@ -73,7 +96,7 @@ function EditCard({ household }) {
                         <Card.Subtitle className="mb-2 text-muted">Address</Card.Subtitle>
                         {' '}
                        
-                        <Card.Title style={{display: 'inline-block'}}>{household.address}
+                        <Card.Title style={addressShow ? {display: 'inline-block', color: 'green'} : {display: 'inline-block'}}>{addressValue}
                         <Button 
                             variant="link"
                             onClick={() => setAddressShow(!addressShow)}
@@ -81,6 +104,7 @@ function EditCard({ household }) {
                             aria-expanded={addressShow}
                             style={{display: 'inline-block'}}
                         >{!addressShow ? 'Edit' : 'Hide'}</Button>
+                        {addressConfirm ? <Badge bg='success'>Saved</Badge> : null }
                         </Card.Title>
                         
                     </Card.Body>
