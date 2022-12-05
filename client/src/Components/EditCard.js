@@ -15,8 +15,9 @@ function EditCard({ household }) {
 
     const [headOfHHShow, setHeadOfHHShow] = useState(false);
     const [addressShow, setAddressShow] = useState(false)
-    const [householdInfoShow, setHouseholdInfoShow] = useState(false)
     const [addressConfirm, setAddressConfirm] = useState(false)
+    const [householdInfoShow, setHouseholdInfoShow] = useState(false)
+    
 
     let headOfHousehold = household.beneficiaries.find(beneficiary => beneficiary.head_of_HH)
 
@@ -57,6 +58,33 @@ function EditCard({ household }) {
 
 
     }
+
+    function handleHeadOfHouseholdSubmit(e) { 
+        e.preventDefault()
+        
+        let beneficiary = household.beneficiaries.find(beneficiary => beneficiary.name === headOfHHValue)
+        let change = {head_of_HH: true}
+
+        fetch(`/beneficiaries/${beneficiary.id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+                body: JSON.stringify(change)
+            })
+                .then(response => response.json())
+                .then(changedBeneficiary=> {
+                    setHeadOfHHShow(false)
+                    console.log(changedBeneficiary)
+
+                    // household.address = changedHousehold.address
+                    // setAddressConfirm(true)
+                    // setTimeout(() => setAddressConfirm(false), 3000)
+                    
+                })
+        
+        
+    }
     
 
     
@@ -96,7 +124,7 @@ function EditCard({ household }) {
                         <Card.Subtitle className="mb-2 text-muted">Address</Card.Subtitle>
                         {' '}
                        
-                        <Card.Title style={addressShow ? {display: 'inline-block', color: 'green'} : {display: 'inline-block'}}>{addressValue}
+                        <Card.Title style={addressShow ? {display: 'inline-block', color: 'green'} : {display: 'inline-block'}}>{household.address}
                         <Button 
                             variant="link"
                             onClick={() => setAddressShow(!addressShow)}
@@ -135,16 +163,12 @@ function EditCard({ household }) {
                     <div id="example-collapse-text">
                         <Card.Body>
             
-                        <Form>
+                        <Form onSubmit={(e) =>handleHeadOfHouseholdSubmit(e)}>
                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                 <Form.Label>Head of HH</Form.Label>
                                 <Form.Select aria-label="Default select example" onChange={(e) => setHeadOfHHValue(e.target.value)}>
-                                {/* <option>Default HH member</option>
-                                <option value="1">Name (gender)</option>
-                                <option value="2">Name (gender)</option>
-                                <option value="3">Name (gender)</option> */}
                                 {household.beneficiaries.map(beneficiary => {
-                                    return <option value={beneficiary.name}>{beneficiary.name}</option>
+                                    return <option value={beneficiary.name} key={beneficiary.id}>{beneficiary.name}</option>
                                 })}
                                 </Form.Select>
                             </Form.Group>
