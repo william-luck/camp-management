@@ -9,6 +9,6 @@ class BeneficiariesController < ApplicationController
     private
 
     def beneficiary_params
-        params.permit(:head_of_HH)
+        params.permit(:head_of_HH, :phone_number, :national_id_number)
     end
 end
