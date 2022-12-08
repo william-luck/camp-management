@@ -9,6 +9,8 @@ import { useState } from "react";
 import Form from 'react-bootstrap/Form';
 import Accordion from 'react-bootstrap/Accordion';
 import Badge from 'react-bootstrap/Badge';
+import InputGroup from 'react-bootstrap/InputGroup';
+import NewHouseholdMemberForm from "./NewHouseholdMemberForm";
 
 
 function EditCard({ household }) {
@@ -19,6 +21,8 @@ function EditCard({ household }) {
     const [addressConfirm, setAddressConfirm] = useState(false)
     const [householdInfoShow, setHouseholdInfoShow] = useState(false)
     const [householdInfoConfirm, setHouseHoldinfoConfirm] = useState(false)
+
+    const [addNewHouseholdMember, setAddNewHouseholdMember] = useState(false)
     
 
     let headOfHousehold = household.beneficiaries.find(beneficiary => beneficiary.head_of_HH)
@@ -282,6 +286,25 @@ function EditCard({ household }) {
                                 )
                             })}
                         </Accordion>
+
+                        <br></br>
+                        <Row>
+                            <Col className="text-center">
+                            <Button size="lg" onClick={() => setAddNewHouseholdMember(!addNewHouseholdMember)}>{!addNewHouseholdMember ? 'Add Household Member' : 'Hide Form'}</Button>
+                            </Col>
+                            <Col className="text-center">
+                                <Button size="lg">Remove HH from Camp</Button>
+                            </Col>
+                        </Row>
+                        <br></br>
+                    </div>
+                </Collapse>
+
+                <Collapse in={addNewHouseholdMember}>
+                    <div>
+                        <Container>
+                            <NewHouseholdMemberForm household={household}/>
+                        </Container>
                     </div>
                 </Collapse>
 
