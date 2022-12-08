@@ -11,6 +11,12 @@ class BeneficiariesController < ApplicationController
         render json: beneficiary, status: :accepted
     end
 
+    def destroy
+        beneficiary = Beneficiary.find(params[:id])
+        beneficiary.destroy
+        head :no_content
+    end
+
     private
 
     def beneficiary_params
