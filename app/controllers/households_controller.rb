@@ -17,6 +17,12 @@ class HouseholdsController < ApplicationController
         render json: household, status: :accepted
     end
 
+    def destroy
+        household = Household.find(params[:id])
+        household.destroy
+        head :no_content
+    end
+
     private
 
     def household_params

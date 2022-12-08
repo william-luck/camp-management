@@ -16,7 +16,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import Alert from 'react-bootstrap/Alert';
 
 
-function EditCard({ household }) {
+function EditCard({ household, setSelectedHousehold, selectedHousehold }) {
 
     const [headOfHHShow, setHeadOfHHShow] = useState(false);
     const [headOfHHConfirm, setHeadOfHHConfirm] = useState(false)
@@ -27,7 +27,8 @@ function EditCard({ household }) {
 
     const [addNewHouseholdMember, setAddNewHouseholdMember] = useState(false)
     const [newHouseholdMemberConfirm, setNewHouseholdMemberConfirm] = useState(false)
-    const [deleteConfirm, setDeleteConfirm] = useState(false)
+    const [memberDeleteConfirm, setMemberDeleteConfirm] = useState(false)
+    const [householdDeleteConfirm, setHouseholdDeleteConfirm] = useState(false)
     
 
     let headOfHousehold = household.beneficiaries.find(beneficiary => beneficiary.head_of_HH)
@@ -147,7 +148,7 @@ function EditCard({ household }) {
             })
     }
 
-    function handleDelete(e, beneficiary) {
+    function handleDeleteMember(e, beneficiary) {
         e.preventDefault()
 
         fetch(`beneficiaries/${beneficiary.id}`, {
@@ -159,10 +160,34 @@ function EditCard({ household }) {
                 household.beneficiaries.splice(index, 1)
             })
             .then(() => {
-                setDeleteConfirm(true)
-                setTimeout(() => setDeleteConfirm(false), 3000)
+                setMemberDeleteConfirm(true)
+                setTimeout(() => setMemberDeleteConfirm(false), 3000)
                 setAccordionKey(accordionKey+1)
             })
+    }
+
+    function handleDeleteHousehold(e) {
+        e.preventDefault() 
+
+        fetch(`households/${household.id}`, {
+            method: 'DELETE'
+        })
+            .then(() => {
+                setHouseholdDeleteConfirm('alert')
+                setTimeout(() => setHouseholdDeleteConfirm('skip'), 6000)
+            })
+
+
+    }
+
+    if (householdDeleteConfirm === 'alert') {
+        return <Alert variant="danger">Household headed by {headOfHousehold.name} has been removed from the camp. All beneficiaries within the household have also been deleted.</Alert>
+    }
+
+    if (householdDeleteConfirm === 'skip') {
+        return(
+            <></>
+        )
     }
         
     
@@ -170,8 +195,7 @@ function EditCard({ household }) {
 
     return (
         <>
-
-    
+            
             <Card>
             <Row>
                 {/* Head of HH overview */}
@@ -232,7 +256,7 @@ function EditCard({ household }) {
                     </Card.Body>
                 </Col>
             </Row>
-            <Container>{deleteConfirm ? <Alert variant={'danger'}>{selectedBeneficiary.name} removed from household and camp.</Alert> : null}</Container>
+            <Container>{memberDeleteConfirm ? <Alert variant={'danger'}>{selectedBeneficiary.name} removed from household and camp.</Alert> : null}</Container>
             <Row>
                 <Col>
                 
@@ -316,7 +340,7 @@ function EditCard({ household }) {
                                                     
                                                 }
                                                 >
-                                                <span><Button variant="danger" disabled={beneficiary.head_of_HH ? true : false} onClick={(e) => handleDelete(e, beneficiary)}>Delete Member from Household</Button></span>
+                                                <span><Button variant="danger" disabled={beneficiary.head_of_HH ? true : false} onClick={(e) => handleDeleteMember(e, beneficiary)}>Remove Member from Household</Button></span>
                                             </OverlayTrigger>
                                         
                                             </Col>
@@ -337,7 +361,7 @@ function EditCard({ household }) {
                             <Button size="lg" onClick={() => setAddNewHouseholdMember(!addNewHouseholdMember)}>{!addNewHouseholdMember ? 'Add Household Member' : 'Hide Form'}</Button>
                             </Col>
                             <Col className="text-center">
-                                <Button size="lg">Remove HH from Camp</Button>
+                                <Button size="lg"  variant='danger' onClick={(e) => handleDeleteHousehold(e)}>Remove HH from Camp</Button>
                             </Col>
                         </Row>
                         <br></br>
