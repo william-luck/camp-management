@@ -11,6 +11,9 @@ import Accordion from 'react-bootstrap/Accordion';
 import Badge from 'react-bootstrap/Badge';
 import InputGroup from 'react-bootstrap/InputGroup';
 import NewHouseholdMemberForm from "./NewHouseholdMemberForm";
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+import Alert from 'react-bootstrap/Alert';
 
 
 function EditCard({ household }) {
@@ -24,6 +27,7 @@ function EditCard({ household }) {
 
     const [addNewHouseholdMember, setAddNewHouseholdMember] = useState(false)
     const [newHouseholdMemberConfirm, setNewHouseholdMemberConfirm] = useState(false)
+    const [deleteConfirm, setDeleteConfirm] = useState(false)
     
 
     let headOfHousehold = household.beneficiaries.find(beneficiary => beneficiary.head_of_HH)
@@ -142,6 +146,24 @@ function EditCard({ household }) {
                 setTimeout(() => setHouseHoldinfoConfirm(false), 3000)
             })
     }
+
+    function handleDelete(e, beneficiary) {
+        e.preventDefault()
+
+        fetch(`beneficiaries/${beneficiary.id}`, {
+            method: 'DELETE'
+        })
+            .then(() => {
+                // Remove beneficiary from household before re-render and state changes
+                let index = household.beneficiaries.findIndex(member => member.id === beneficiary.id)
+                household.beneficiaries.splice(index, 1)
+            })
+            .then(() => {
+                setDeleteConfirm(true)
+                setTimeout(() => setDeleteConfirm(false), 3000)
+                setAccordionKey(accordionKey+1)
+            })
+    }
         
     
         
@@ -210,6 +232,7 @@ function EditCard({ household }) {
                     </Card.Body>
                 </Col>
             </Row>
+            <Container>{deleteConfirm ? <Alert variant={'danger'}>{selectedBeneficiary.name} removed from household and camp.</Alert> : null}</Container>
             <Row>
                 <Col>
                 
@@ -277,9 +300,29 @@ function EditCard({ household }) {
                                                 <Form.Control placeholder="address" value={phoneNumberValue} onChange={e => setPhoneNumberValue(e.target.value)}/>
                                             </Form.Group>
 
+                                            <Row>
+                                            <Col className="text-center">
                                             <Button variant="primary" type="submit">
-                                                Save
+                                                Update Data
                                             </Button>
+                                            </Col>
+
+                                            <Col className="text-center">
+                                            
+                                            <OverlayTrigger
+                                                placement='top'
+                                                overlay={
+                                                    beneficiary.head_of_HH ? <Tooltip>Assign another head of HH before deletion</Tooltip> : <Tooltip>This beneficiary will also be removed from the camp</Tooltip>
+                                                    
+                                                }
+                                                >
+                                                <span><Button variant="danger" disabled={beneficiary.head_of_HH ? true : false} onClick={(e) => handleDelete(e, beneficiary)}>Delete Member from Household</Button></span>
+                                            </OverlayTrigger>
+                                        
+                                            </Col>
+                                            </Row>
+
+                                            
                                         </Form>
                                         </Accordion.Body>
                                     </Accordion.Item>
@@ -300,7 +343,8 @@ function EditCard({ household }) {
                         <br></br>
                     </div>
                 </Collapse>
-
+                
+                {/* New HH member form */}
                 <Collapse in={addNewHouseholdMember}>
                     <div>
                         <Container>
