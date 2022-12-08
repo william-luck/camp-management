@@ -23,6 +23,7 @@ function EditCard({ household }) {
     const [householdInfoConfirm, setHouseHoldinfoConfirm] = useState(false)
 
     const [addNewHouseholdMember, setAddNewHouseholdMember] = useState(false)
+    const [newHouseholdMemberConfirm, setNewHouseholdMemberConfirm] = useState(false)
     
 
     let headOfHousehold = household.beneficiaries.find(beneficiary => beneficiary.head_of_HH)
@@ -263,7 +264,7 @@ function EditCard({ household }) {
                             {household.beneficiaries.sort((a,b) => Number(b.head_of_HH) - Number(a.head_of_HH)).map(beneficiary => {
                                 return (
                                     <Accordion.Item eventKey={beneficiary.id}>
-                                        <Accordion.Header onClick={() => handleIDandAddressClick(beneficiary)}>{beneficiary.name} ({beneficiary.gender}) {beneficiary.head_of_HH ? '--Head of Household' : null} &nbsp; {householdInfoConfirm.id === beneficiary.id ? <Badge bg='success'>Information Updated</Badge> : null }</Accordion.Header>
+                                        <Accordion.Header onClick={() => handleIDandAddressClick(beneficiary)}>{beneficiary.name} ({beneficiary.gender}) {beneficiary.head_of_HH ? '--Head of Household' : null} &nbsp; {householdInfoConfirm.id === beneficiary.id ? <Badge bg='success'>Information Updated</Badge> : null }{newHouseholdMemberConfirm.id === beneficiary.id ? <Badge bg='success'>Successfully added to household</Badge> : null}</Accordion.Header>
                                         <Accordion.Body>
                                         <Form onSubmit={handlePhoneOrIDSubmit}>
                                             <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -303,7 +304,12 @@ function EditCard({ household }) {
                 <Collapse in={addNewHouseholdMember}>
                     <div>
                         <Container>
-                            <NewHouseholdMemberForm household={household}/>
+                            <NewHouseholdMemberForm 
+                                household={household} 
+                                addNewHouseholdMember={addNewHouseholdMember} 
+                                setAddNewHouseholdMember={setAddNewHouseholdMember}
+                                setNewHouseholdMemberConfirm={setNewHouseholdMemberConfirm}
+                                />
                         </Container>
                     </div>
                 </Collapse>

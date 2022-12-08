@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Button from "react-bootstrap/esm/Button";
 import { useState } from "react";
 
-function NewHouseholdMemberForm({ household }) {
+function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHouseholdMember, setNewHouseholdMemberConfirm}) {
 
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -35,7 +35,35 @@ function NewHouseholdMemberForm({ household }) {
             body: JSON.stringify(formData)
         })
             .then(response => response.json())
-            .then(newBeneficiary => console.log(newBeneficiary))
+            .then(newBeneficiary => {
+                setNewHouseholdMemberConfirm(newBeneficiary)
+                household.beneficiaries.push(newBeneficiary)
+                setTimeout(() => setNewHouseholdMemberConfirm(false), 3000)
+            })
+            .then(() => {
+                setAddNewHouseholdMember(!addNewHouseholdMember)
+                clearFormData(e)
+            })
+
+        // Collapses Form and clears form data
+        
+
+        
+
+
+
+        // I want the household to re-render so that I'm immediately added to the list of household members
+
+    }
+
+    function clearFormData(e) {
+        setFirstName('')
+        setLastName('')
+        setGender('')
+        setDateOfBirth('')
+        setPhoneNumber('')
+        setIdNumber('')
+        e.target.reset()
     }
 
     return (
