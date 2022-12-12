@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Button from "react-bootstrap/esm/Button";
 import { useState } from "react";
 
-function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHouseholdMember, setNewHouseholdMemberConfirm}) {
+function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHouseholdMember, setNewHouseholdMemberConfirm, setNewHousehold, location}) {
 
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -13,9 +13,7 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
     const [phoneNumber, setPhoneNumber] = useState('')
     const [idNumber, setIdNumber] = useState('')
 
-    function handleSubmit(e) {
-
-        e.preventDefault()
+    function householdMemberObject() {
 
         let formData = {
             name:  firstName + ' ' + lastName,
@@ -23,9 +21,32 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
             DOB: dateOfBirth,
             phone_number: phoneNumber,
             national_id_number: idNumber,
-            head_of_HH: false, 
-            household_id: household.id
         }
+
+        // head_of_HH: false, 
+        // household_id: household.id
+
+        return formData;
+
+    }
+
+    function createHouseholdAndAccount() {
+        // This function should create the household, the account, and the beneficiary as head of HH (three seperate post requests, in that order)
+
+        fetch(`/households`)
+    }
+
+    function handleSubmit(e) {
+
+        e.preventDefault()
+
+        if (location.pathname === '/add-new-hh') {
+            createHouseholdAndAccount()
+        }
+
+        
+
+        
 
         fetch(`/beneficiaries`, {
             method: 'POST',
@@ -44,15 +65,6 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
                 setAddNewHouseholdMember(!addNewHouseholdMember)
                 clearFormData(e)
             })
-
-        // Collapses Form and clears form data
-        
-
-        
-
-
-
-        // I want the household to re-render so that I'm immediately added to the list of household members
 
     }
 

@@ -3,7 +3,7 @@ import Container from "react-bootstrap/esm/Container";
 import EditCard from "./EditCard";
 import { useState } from "react";
 
-function EditHouseholds( {households}) {
+function EditHouseholds( {households, location}) {
 
     return (
         <div style={{maxHeight: '800px', overflowY: 'scroll'}}>
@@ -11,7 +11,7 @@ function EditHouseholds( {households}) {
         <Container>
         <div style={{fontSize: 'x-large', display:'inline-block'}}>Edit Camp Households</div>
         {households.map(household => {
-            return <EditCard household={household} key={household.id}/>
+            return <EditCard household={household} key={household.id} location={location}/>
         })}
         </Container>
         

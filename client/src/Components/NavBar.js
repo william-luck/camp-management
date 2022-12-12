@@ -16,7 +16,7 @@ function NavBar() {
         <Nav.Link to='/edit-hhs' as={Link} eventKey="edit">Edit HHs</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-        <Nav.Link eventKey="add">New HH arrival</Nav.Link>
+        <Nav.Link to='/add-new-hh' as={Link}>New HH arrival</Nav.Link>
         </Nav.Item>
         </Nav>
         </>

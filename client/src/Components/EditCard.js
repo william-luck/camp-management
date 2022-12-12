@@ -16,7 +16,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import Alert from 'react-bootstrap/Alert';
 
 
-function EditCard({ household, setSelectedHousehold, selectedHousehold }) {
+function EditCard({ household, setSelectedHousehold, selectedHousehold, location }) {
 
     const [headOfHHShow, setHeadOfHHShow] = useState(false);
     const [headOfHHConfirm, setHeadOfHHConfirm] = useState(false)
@@ -377,6 +377,7 @@ function EditCard({ household, setSelectedHousehold, selectedHousehold }) {
                                 addNewHouseholdMember={addNewHouseholdMember} 
                                 setAddNewHouseholdMember={setAddNewHouseholdMember}
                                 setNewHouseholdMemberConfirm={setNewHouseholdMemberConfirm}
+                                location={location}
                                 />
                         </Container>
                     </div>
