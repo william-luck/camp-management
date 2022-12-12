@@ -31,7 +31,7 @@ function App() {
             .then(households => setHouseholds(households))
       } 
     })
-  }, [])
+  }, [newHousehold])
 
   if (!user) return <Login setUser={setUser} />
 
@@ -54,7 +54,7 @@ function App() {
             <EditHouseholds households={households} location={location}/>
           </Route>
           <Route path='/add-new-hh'>
-            <NewHousehold setNewHousehold={setNewHousehold} location={location}/>
+            <NewHousehold setNewHousehold={setNewHousehold} location={location} user={user} households={households}/>
           </Route>
         </Col>
       </Row>

@@ -2,7 +2,7 @@ import React from "react";
 import NewHouseholdMemberForm from "./NewHouseholdMemberForm";
 
 
-function NewHousehold({ setNewHousehold, location}) {
+function NewHousehold({ setNewHousehold, location, user, households}) {
 
     return (
         <>
@@ -12,7 +12,7 @@ function NewHousehold({ setNewHousehold, location}) {
         <br></br>
         <hr/>
         <br></br>
-        <NewHouseholdMemberForm setNewHousehold={setNewHousehold} location={location}/>
+        <NewHouseholdMemberForm setNewHousehold={setNewHousehold} location={location} user={user} households={households}/>
         </>
     )
 

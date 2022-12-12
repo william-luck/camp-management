@@ -11,10 +11,15 @@ class AccountsController < ApplicationController
         render json: account, status: :accepted
     end
 
+    def create
+        account = Account.create!(account_params)
+        render json: account, status: :created
+    end
+
     private
 
     def account_params
-        params.permit(:funds)
+        params.permit(:user_id, :household_id, :funds)
     end
 
     

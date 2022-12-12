@@ -8,13 +8,17 @@ class HouseholdsController < ApplicationController
     def show 
         household = Household.find(params[:id])
         render json: household, status: :ok
-
     end
 
     def update
         household = Household.find(params[:id])
         household.update!(household_params)
         render json: household, status: :accepted
+    end
+
+    def create
+        household = Household.create!(household_params)
+        render json: household, status: :created
     end
 
     def destroy
@@ -26,7 +30,7 @@ class HouseholdsController < ApplicationController
     private
 
     def household_params
-        params.permit(:address)
+        params.permit(:address, :date_of_entry)
     end
     
 end
