@@ -8,7 +8,7 @@ import HouseholdList from "./HouseholdList";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { BrowserRouter, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Route, useHistory, useLocation } from "react-router-dom";
 import NavBar from "./NavBar";
 import EditHouseholds from "./EditHouseholds";
 import NewHousehold from "./NewHousehold";
@@ -44,10 +44,10 @@ function App() {
         <Col xs={4}>
           <UserInformation user={user}/>
           <br></br>
-          <NavBar/>
+          <NavBar location={location}/>
         </Col>
         <Col>
-          <Route exact path='/'>
+          <Route exact path='/home'>
             <HouseholdList households={households} setHouseholds={setHouseholds}/>
           </Route>
           <Route path='/edit-hhs'>

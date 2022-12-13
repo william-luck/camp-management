@@ -3,6 +3,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Form from 'react-bootstrap/Form';
 import Button from "react-bootstrap/esm/Button";
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHouseholdMember, setNewHouseholdMemberConfirm, setNewHousehold, location, user, households}) {
 
@@ -13,6 +14,8 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
     const [phoneNumber, setPhoneNumber] = useState('')
     const [idNumber, setIdNumber] = useState('')
     const [address, setAddress] = useState('')
+
+    const history = useHistory() 
 
     function householdMemberObject() {
 
@@ -87,6 +90,9 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
                             .then(newAccount => {
                                 console.log(newAccount)
                                 setNewHousehold(createdHousehold)
+
+                                history.push('/edit-hhs')
+
                             })
                     })
                 
@@ -95,12 +101,16 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
 
     function createBeneficiary(e) {
 
+        let beneficiaryCreation = householdMemberObject()
+        beneficiaryCreation.head_of_HH = false
+        beneficiaryCreation.household_id = household.id
+
         fetch(`/beneficiaries`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(() => householdMemberObject())
+            body: JSON.stringify(beneficiaryCreation)
         })
             .then(response => response.json())
             .then(newBeneficiary => {

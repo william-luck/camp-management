@@ -4,19 +4,19 @@ import { Link, } from 'react-router-dom'
 import Navbar from 'react-bootstrap/Navbar'
 
 
-function NavBar() {
+function NavBar({ location }) {
     
     return (
         <>
-        <Nav fill className="flex-column" variant="pills" defaultActiveKey="distribute">
+        <Nav fill className="flex-column" variant="pills" defaultActiveKey={location.pathname}>
         <Nav.Item>
-        <Nav.Link to="/" as={Link} eventKey="distribute">Distrisbute to HHs</Nav.Link>
+        <Nav.Link to="/home" as={Link} eventKey="/home">Distrisbute to HHs</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-        <Nav.Link to='/edit-hhs' as={Link} eventKey="edit">Edit HHs</Nav.Link>
+        <Nav.Link to='/edit-hhs' as={Link} eventKey="/edit-hhs">Edit HHs</Nav.Link>
         </Nav.Item>
         <Nav.Item>
-        <Nav.Link to='/add-new-hh' as={Link}>New HH arrival</Nav.Link>
+        <Nav.Link to='/add-new-hh' eventKey={'/add-new-hh'} as={Link}>New HH arrival</Nav.Link>
         </Nav.Item>
         </Nav>
         </>
