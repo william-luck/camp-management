@@ -1,14 +1,16 @@
 import React from "react";
 import Nav from 'react-bootstrap/Nav';
 import { Link, } from 'react-router-dom'
-import Navbar from 'react-bootstrap/Navbar'
+
+import { useState } from "react";
 
 
 function NavBar({ location }) {
     
+    
     return (
         <>
-        <Nav fill className="flex-column" variant="pills" defaultActiveKey={location.pathname}>
+        <Nav fill className="flex-column" variant="pills" activeKey={location.pathname}>
         <Nav.Item>
         <Nav.Link to="/home" as={Link} eventKey="/home">Distrisbute to HHs</Nav.Link>
         </Nav.Item>

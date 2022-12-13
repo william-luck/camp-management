@@ -8,7 +8,8 @@ import HouseholdList from "./HouseholdList";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { BrowserRouter, Route, useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import NavBar from "./NavBar";
 import EditHouseholds from "./EditHouseholds";
 import NewHousehold from "./NewHousehold";
@@ -26,10 +27,11 @@ function App() {
     fetch('/me').then(response => {
       if (response.ok) {
         response.json().then(user => setUser(user))
-        fetch('/households')
+      } 
+
+      fetch('/households')
             .then(r => r.json())
             .then(households => setHouseholds(households))
-      } 
     })
   }, [newHousehold])
 
@@ -47,6 +49,7 @@ function App() {
           <NavBar location={location}/>
         </Col>
         <Col>
+          <Switch>
           <Route exact path='/home'>
             <HouseholdList households={households} setHouseholds={setHouseholds}/>
           </Route>
@@ -56,6 +59,7 @@ function App() {
           <Route path='/add-new-hh'>
             <NewHousehold setNewHousehold={setNewHousehold} location={location} user={user} households={households}/>
           </Route>
+          </Switch>
         </Col>
       </Row>
     </Container>
