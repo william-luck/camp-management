@@ -7,7 +7,7 @@ function SuccessAlert({ setAlertShow, distributionAmount, distributionEvent, hou
     let affectedHouseholds = []
     // Pushes all HH information to array of affected households 
     for (const distributedHousehold of distributionEvent) {
-        affectedHouseholds.push(households[distributedHousehold])
+        affectedHouseholds.push(households.find(household => household.id === distributedHousehold))
     }
 
     let latestDistributions = []

@@ -26,12 +26,6 @@ function HouseholdList({ households, setHouseholds }) {
 
     
 
-    // useEffect(() => {
-    //     fetch('/households')
-    //         .then(response => response.json())
-    //         .then(households => setHouseholds(households))
-    // }, [])
-
     function handleSelectAll() {
         // if all already selected, deselect all
         if (selectedHouseholds.length === households.length) {
@@ -55,11 +49,10 @@ function HouseholdList({ households, setHouseholds }) {
 
 
         for (const selectedHousehold of selectedHouseholds) {
-            let tempHouseholds = [...households]
-            let household = tempHouseholds[selectedHousehold]
+            let household = households.find(household => household.id === selectedHousehold)
 
             const newDistribution = {
-                account_id: household.id,
+                account_id: selectedHousehold,
                 amount: household.beneficiaries.length * parseInt(distributionAmount),
                 date: new Date().toJSON().slice(0, 10),
                 collected: false
@@ -74,15 +67,14 @@ function HouseholdList({ households, setHouseholds }) {
                 })
                     .then(response => response.json())
                     .then(distribution => {
-                        tempHouseholds[selectedHousehold].account.distributions.push(distribution)
-                        setHouseholds(tempHouseholds)
+                        household.account.distributions.push(distribution)
                     })
-
+                    .then(() => {
+                        setSelectedHouseholds([])
+                        setOcShow(false)
+                        setAlertShow(true)
+                    })
         }
-
-        setSelectedHouseholds([])
-        setOcShow(false)
-        setAlertShow(true)
         
     }
 

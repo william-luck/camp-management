@@ -22,7 +22,7 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
     // When selected households change (upon select all), set selected status if household is in array of selected households 
     // (will return true if select all)
     useEffect(() => {
-        setSelected(selectedHouseholds.includes(household.id-1))
+        setSelected(selectedHouseholds.includes(household.id))
 
     }, [selectedHouseholds])
 
@@ -72,7 +72,8 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
                         setSelected(!selected) 
                         // Remove household from array of selected households
                         let tempSelected = [...selectedHouseholds]
-                        let index = tempSelected.indexOf(parseInt(e.target.id)-1)
+                        // let index = tempSelected.indexOf(parseInt(e.target.id)-1)
+                        let index = tempSelected.indexOf(household.id)
                         tempSelected.splice(index, 1)
                         setSelectedHouseholds(tempSelected)
                     } else {
@@ -80,7 +81,9 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
                         setSelected(!selected)
                         // Add household ID to array of selected households (for eventual POST to account)
                         let tempSelected = [...selectedHouseholds]
-                        tempSelected.push(parseInt(e.target.id)-1)
+                        // tempSelected.push(parseInt(e.target.id)-1)
+                        // console.log(household.id)
+                        tempSelected.push(household.id)
                         setSelectedHouseholds(tempSelected)
                     }
                     
@@ -96,7 +99,7 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
                 <Card.Subtitle className={selected ? "mb-2" : "mb-2 text-muted"}>Household members: {household.beneficiaries.length}</Card.Subtitle>
                 <Card.Text>
                     Funds in account: {uncollectedDistributions.reduce((acc, dist) => acc + dist.amount, 0)}
-                    {' '}{alertShow && distributionEvent.includes(household.id-1) ? <Badge bg="success"> +{multipleDistributionAmount * household.beneficiaries.length} IQD</Badge> : null}
+                    {' '}{alertShow && distributionEvent.includes(household.id) ? <Badge bg="success"> +{multipleDistributionAmount * household.beneficiaries.length} IQD</Badge> : null}
                          {individualAlert ? <Badge bg="success"> +{individualAlert} IQD</Badge> : null} 
                          {individualAlert ? displayIndividualAlert() : null}
                 </Card.Text>
