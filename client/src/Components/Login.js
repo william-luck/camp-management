@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import { useState, UseEffect } from "react";
 import Alert from 'react-bootstrap/Alert';
+import SignUpForm from "./SignUpForm";
 
 
 
@@ -14,6 +15,8 @@ function Login({ setUser}) {
     const [password, setPassword] = useState("");
 
     const [errors, setErrors] = useState([])
+
+    const [showLogin, setShowLogin] = useState(true)
     
     
     function handleSubmit(e) {
@@ -39,36 +42,41 @@ function Login({ setUser}) {
         })
     }
 
-    function errorMessage() {
-        <Alert variant="danger" onClose={() => setErrors('')} dismissible>{errors}</Alert>
 
-    }
 
 
     return (
         <>
         <Container>
-        <Form onSubmit={e => handleSubmit(e)}>
-            <Form.Group className="mb-3">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control type="username" placeholder="Enter username" value={username} onChange={e => setUsername(e.target.value)} />
-            </Form.Group>
-    
-            <Form.Group className="mb-3">
-                <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}/>
-            </Form.Group>
-
-            {errors.map(error => <Alert key={error} variant="danger" onClose={() => setErrors([])} dismissible>{error}</Alert>)}
-
-            <Button variant="primary" type="submit">
-                Submit
-            </Button>
-
-            
-
-            
-        </Form>
+        <div><h3>{showLogin ? 'Log in' : 'Sign up'}</h3></div>
+        {showLogin ? 
+             <Form onSubmit={e => handleSubmit(e)}>
+             <Form.Group className="mb-3">
+                 <Form.Label>Email address</Form.Label>
+                 <Form.Control type="username" placeholder="Enter username" value={username} onChange={e => setUsername(e.target.value)} />
+             </Form.Group>
+     
+             <Form.Group className="mb-3">
+                 <Form.Label>Password</Form.Label>
+                 <Form.Control type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)}/>
+             </Form.Group>
+ 
+             {errors.map(error => <Alert key={error} variant="danger" onClose={() => setErrors([])} dismissible>{error}</Alert>)}
+ 
+             <Button variant="primary" type="submit" style={{display: 'inline-block'}}>
+                 Submit
+             </Button>
+ 
+             {' '}
+             <span>
+                 No account? 
+                 <Button variant="link" onClick={() => setShowLogin(false)}>Sign up</Button>
+             </span>
+            </Form>
+        : 
+           <SignUpForm setUser={setUser}/>
+        }
+       
         </Container>
 
         </>
