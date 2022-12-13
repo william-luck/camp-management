@@ -11,5 +11,13 @@ class SessionsController < ApplicationController
             render json: {errors: ['Username or password is incorrect']}, status: :unauthorized
         end
     end
+
+    def destroy
+        user = User.find(session[:user_id])
+        if user
+            session.clear
+            head :no_content
+        end
+    end
     
 end

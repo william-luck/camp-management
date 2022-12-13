@@ -44,7 +44,7 @@ function App() {
     <Container>
       <Row>
         <Col xs={4}>
-          <UserInformation user={user}/>
+          <UserInformation user={user} setUser={setUser}/>
           <br></br>
           <NavBar location={location}/>
         </Col>
