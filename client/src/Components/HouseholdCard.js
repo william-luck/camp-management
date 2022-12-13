@@ -45,6 +45,7 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
                 .then(response => response.json())
                 .then(distribution => {
                     setDistributions([...distributions, distribution])
+                    household.account.distributions.push(distribution)
                     setIndividualAlert(distribution.amount)
                 })
             
