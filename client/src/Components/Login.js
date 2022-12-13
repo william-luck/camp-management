@@ -52,7 +52,7 @@ function Login({ setUser}) {
         {showLogin ? 
              <Form onSubmit={e => handleSubmit(e)}>
              <Form.Group className="mb-3">
-                 <Form.Label>Email address</Form.Label>
+                 <Form.Label>Username</Form.Label>
                  <Form.Control type="username" placeholder="Enter username" value={username} onChange={e => setUsername(e.target.value)} />
              </Form.Group>
      

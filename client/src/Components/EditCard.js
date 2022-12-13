@@ -310,7 +310,7 @@ function EditCard({ household, setSelectedHousehold, selectedHousehold, location
                             {/* Map Accordian Items according to HH member  */}
                             {household.beneficiaries.sort((a,b) => Number(b.head_of_HH) - Number(a.head_of_HH)).map(beneficiary => {
                                 return (
-                                    <Accordion.Item eventKey={beneficiary.id}>
+                                    <Accordion.Item eventKey={beneficiary.id} key={beneficiary.id}>
                                         <Accordion.Header onClick={() => handleIDandAddressClick(beneficiary)}>{beneficiary.name} ({beneficiary.gender}) {beneficiary.head_of_HH ? '--Head of Household' : null} &nbsp; {householdInfoConfirm.id === beneficiary.id ? <Badge bg='success'>Information Updated</Badge> : null }{newHouseholdMemberConfirm.id === beneficiary.id ? <Badge bg='success'>Successfully added to household</Badge> : null}</Accordion.Header>
                                         <Accordion.Body>
                                         <Form onSubmit={handlePhoneOrIDSubmit}>

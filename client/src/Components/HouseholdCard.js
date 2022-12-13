@@ -12,12 +12,11 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
 
     const [selected, setSelected] = useState(false)
     const [distributionAmount, setDistributionAmount] = useState('12000')
-    const [distributions, setDistributions] = useState(household.account.distributions)
 
     const [individualAlert, setIndividualAlert] = useState(false)
 
     const headOfHH = household.beneficiaries.filter(beneficiary => beneficiary.head_of_HH)[0]
-    const uncollectedDistributions = distributions.filter(distribution => distribution.collected === false)
+
 
     // When selected households change (upon select all), set selected status if household is in array of selected households 
     // (will return true if select all)
@@ -44,7 +43,6 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
             })
                 .then(response => response.json())
                 .then(distribution => {
-                    setDistributions([...distributions, distribution])
                     household.account.distributions.push(distribution)
                     setIndividualAlert(distribution.amount)
                 })
@@ -72,7 +70,6 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
                         setSelected(!selected) 
                         // Remove household from array of selected households
                         let tempSelected = [...selectedHouseholds]
-                        // let index = tempSelected.indexOf(parseInt(e.target.id)-1)
                         let index = tempSelected.indexOf(household.id)
                         tempSelected.splice(index, 1)
                         setSelectedHouseholds(tempSelected)
@@ -81,8 +78,6 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
                         setSelected(!selected)
                         // Add household ID to array of selected households (for eventual POST to account)
                         let tempSelected = [...selectedHouseholds]
-                        // tempSelected.push(parseInt(e.target.id)-1)
-                        // console.log(household.id)
                         tempSelected.push(household.id)
                         setSelectedHouseholds(tempSelected)
                     }
@@ -98,7 +93,7 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
                 <Card.Subtitle className={selected ? "mb-2" : "mb-2 text-muted"}>National ID number: {headOfHH.national_id_number}</Card.Subtitle>
                 <Card.Subtitle className={selected ? "mb-2" : "mb-2 text-muted"}>Household members: {household.beneficiaries.length}</Card.Subtitle>
                 <Card.Text>
-                    Funds in account: {uncollectedDistributions.reduce((acc, dist) => acc + dist.amount, 0)}
+                    Funds in account: {household.account.distributions.filter(distribution => distribution.collected === false).reduce((acc, dist) => acc + dist.amount, 0)}
                     {' '}{alertShow && distributionEvent.includes(household.id) ? <Badge bg="success"> +{multipleDistributionAmount * household.beneficiaries.length} IQD</Badge> : null}
                          {individualAlert ? <Badge bg="success"> +{individualAlert} IQD</Badge> : null} 
                          {individualAlert ? displayIndividualAlert() : null}
