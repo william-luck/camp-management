@@ -2,6 +2,7 @@ import React from "react";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useState } from "react";
+import Alert from 'react-bootstrap/Alert';
 
 
 function SignUpForm({ setUser }) {
@@ -12,6 +13,7 @@ function SignUpForm({ setUser }) {
     const [governorate, setGovernorate] = useState('')
     const [password, setPassword] = useState('')
     const [passwordConfirm, setPasswordConfirm] = useState('')
+    
 
     const [errors, setErrors] = useState([])
 
@@ -78,6 +80,8 @@ function SignUpForm({ setUser }) {
                 <Form.Label>Confirm Password</Form.Label>
                 <Form.Control type="password" placeholder="Confirm password" value={passwordConfirm} onChange={e => setPasswordConfirm(e.target.value)}/>
             </Form.Group>
+
+            {errors.map(error => <Alert key={error} variant="danger" onClose={() => setErrors([])} dismissible>{error}</Alert>)}
 
             <Button variant="primary" type="submit">Signup</Button>
         </Form>
