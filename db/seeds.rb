@@ -8,12 +8,20 @@ def generate_distribution_date(count)
     end
 end
 
+def pair_event_to_distribution(count)
+    Event.find(count+1).date
+end
+
 
 
 
 
 # Create one user (camp manager)
 User.create(username: 'camp_manager', password: 'test_password', email: 'management@management.com', district: 'Dahuk', governorate: 'Dahuk')
+
+10.times do |count|
+    Event.create(date: generate_distribution_date(count))
+end
 
 # Create 20 HHs, with 3 - 8 beneficiaries each, with one head of HH
 20.times do |count|
@@ -48,12 +56,7 @@ User.create(username: 'camp_manager', password: 'test_password', email: 'managem
     amount_multiplier = household.beneficiaries.count
 
     # Generate distribution date to be used in Event creation and individual distribution creation
-    distribution_date = generate_distribution_date(count)
-
-    # Create 10 distribution events
-    if count < 10
-        Event.create(date: distribution_date)
-    end
+    
 
     # Create 10 distributions for the year for beneficiaries, using same distribution date as event creation
     10.times do |count| 
@@ -62,7 +65,7 @@ User.create(username: 'camp_manager', password: 'test_password', email: 'managem
             account_id: account.id,
             event_id: count+1,
             amount: 12000 * amount_multiplier, 
-            date: distribution_date,
+            date: pair_event_to_distribution(count),
             collected: true
         )
     end
