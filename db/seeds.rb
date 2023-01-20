@@ -10,6 +10,8 @@ end
 
 
 
+
+
 # Create one user (camp manager)
 User.create(username: 'camp_manager', password: 'test_password', email: 'management@management.com', district: 'Dahuk', governorate: 'Dahuk')
 
@@ -45,14 +47,22 @@ User.create(username: 'camp_manager', password: 'test_password', email: 'managem
     account = Account.create(user_id: 1, household_id: household.id, funds: 0)
     amount_multiplier = household.beneficiaries.count
 
-    # Create 10 distributions for the year for beneficiaries
-    
-    
+    # Generate distribution date to be used in Event creation and individual distribution creation
+    distribution_date = generate_distribution_date(count)
+
+    # Create 10 distribution events
+    if count < 10
+        Event.create(date: distribution_date)
+    end
+
+    # Create 10 distributions for the year for beneficiaries, using same distribution date as event creation
     10.times do |count| 
+
         Distribution.create(
             account_id: account.id,
+            event_id: count+1,
             amount: 12000 * amount_multiplier, 
-            date: generate_distribution_date(count),
+            date: distribution_date,
             collected: true
         )
     end
