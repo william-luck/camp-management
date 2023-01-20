@@ -33,7 +33,7 @@ function HouseholdList({ households, setHouseholds }) {
         } else {
             // add all HHs to selected HH array
             let tempSelected = []
-            for (let i=0; i < households.length; i++) {
+            for (let i=1; i < households.length+1; i++) {
                 tempSelected.push(i)
             }
             setSelectedHouseholds(tempSelected)
