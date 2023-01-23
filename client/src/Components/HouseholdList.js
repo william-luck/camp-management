@@ -13,6 +13,8 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import HouseholdCard from "./HouseholdCard";
 import SuccessAlert from "./SuccessAlert";
 
+import Alert from 'react-bootstrap/Alert';
+
 
 function HouseholdList({ households, setHouseholds, currentEvent, setCurrentEvent }) {
 
@@ -24,6 +26,7 @@ function HouseholdList({ households, setHouseholds, currentEvent, setCurrentEven
     const [ocShow, setOcShow] = useState(false);
     const [newEventOcShow, setNewEventOcShow] = useState(false)
     const [alertShow, setAlertShow] = useState(false)
+    const [newDistributionEventAlertShow, setNewDistributionEventAlertShow] = useState(false)
 
     
 
@@ -83,8 +86,9 @@ function HouseholdList({ households, setHouseholds, currentEvent, setCurrentEven
     function handleNewEvent(e) {
 
         setNewEventOcShow(false)
+        setNewDistributionEventAlertShow(true)
 
-        // I want to create a new event in the database 
+        // Creates a new distribution event, all future distributions will be associated with the new event.
         fetch('/events', {
             method: 'POST', 
             headers: {
@@ -152,13 +156,24 @@ function HouseholdList({ households, setHouseholds, currentEvent, setCurrentEven
         </Offcanvas>
     )
 
+    const newDistributionEventAlert = (
+        <Alert variant="warning" dismissible onClose={() => setNewDistributionEventAlertShow(false)}>
+                <Alert.Heading>
+                    New distribution event created.
+                </Alert.Heading>
+                <p>
+                    All household account funds have been reset. Subsequent distributions will be grouped under Camp Distribution #{currentEvent}
+                </p>
+        </Alert>
+    )
+
 
 
     return (
         <div>
         <Container>
             <div>
-                <div style={{fontSize: 'x-large', display: 'inline-block'}}>Camp Distribution {currentEvent}</div>
+                <div style={{fontSize: 'x-large', display: 'inline-block'}}>Camp Distribution #{currentEvent}</div>
                 <div style={{ float: 'right', display: 'inline-block'}}><Button onClick={() => setNewEventOcShow(true)}>New Distribution Event</Button></div>
             </div>
             <p></p>
@@ -172,6 +187,7 @@ function HouseholdList({ households, setHouseholds, currentEvent, setCurrentEven
             
             <p></p>
             {alertShow ? <SuccessAlert setAlertShow={setAlertShow} distributionAmount={distributionAmount} distributionEvent={distributionEvent} households={households}/> : null}
+            {newDistributionEventAlertShow ? newDistributionEventAlert : null}
 
             <div style={{maxHeight: '725px', overflowY: 'scroll'}}>
             <Form>
