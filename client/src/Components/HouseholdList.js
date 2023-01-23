@@ -79,6 +79,25 @@ function HouseholdList({ households, setHouseholds, currentEvent }) {
         
     }
 
+    function handleNewEvent(e) {
+        // I want to create a new event in the database 
+
+        fetch('/events', {
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({date: new Date().toJSON().slice(0, 10)})
+        })
+            .then(r => r.json())
+            .then(newEvent => console.log(newEvent))
+        // Set the state value of the current event plus one
+
+        // Display an alert message (popup?) of what creating a new event will do 
+
+        // Then, set all account funds to zero, not quite sure how to do this. 
+    }
+
     const offCanvas = (
         <Offcanvas show={ocShow} onHide={() => setOcShow(false)} placement='bottom'>
             <Container>
@@ -111,9 +130,9 @@ function HouseholdList({ households, setHouseholds, currentEvent }) {
     return (
         <div>
         <Container>
-        <div>
+            <div>
                 <div style={{fontSize: 'x-large', display: 'inline-block'}}>Camp Distribution {currentEvent}</div>
-                <div style={{ float: 'right', display: 'inline-block'}}><Button onClick={() => console.log('ive been clicked')}>New Distribution Event</Button></div>
+                <div style={{ float: 'right', display: 'inline-block'}}><Button onClick={() => handleNewEvent()}>New Distribution Event</Button></div>
             </div>
             <p></p>
             <div style={{fontSize: 'x-large', display:'inline-block'}}>Distribute to Households in IDP Camp</div>
