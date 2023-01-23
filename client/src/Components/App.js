@@ -61,7 +61,7 @@ function App() {
             <HouseholdList households={households} setHouseholds={setHouseholds} currentEvent={currentEvent} setCurrentEvent={setCurrentEvent}/>
           </Route>
           <Route path='/edit-hhs'>
-            <EditHouseholds households={households} location={location}/>
+            <EditHouseholds households={households} location={location} newHousehold={newHousehold} setNewHousehold={setNewHousehold}/>
           </Route>
           <Route path='/add-new-hh'>
             <NewHousehold setNewHousehold={setNewHousehold} location={location} user={user} households={households}/>

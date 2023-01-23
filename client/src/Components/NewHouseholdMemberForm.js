@@ -88,10 +88,10 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
                         })
                             .then(r => r.json())
                             .then(newAccount => {
-                                console.log(newAccount)
                                 setNewHousehold(createdHousehold)
 
                                 history.push('/edit-hhs')
+                                // Set state for scrolling.. 
 
                             })
                     })

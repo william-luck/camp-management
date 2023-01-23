@@ -18,6 +18,7 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
     const headOfHH = household.beneficiaries.filter(beneficiary => beneficiary.head_of_HH)[0]
 
 
+
     // When selected households change (upon select all), set selected status if household is in array of selected households 
     // (will return true if select all)
     useEffect(() => {
@@ -94,7 +95,8 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
                 <Card.Subtitle className={selected ? "mb-2" : "mb-2 text-muted"}>National ID number: {headOfHH.national_id_number}</Card.Subtitle>
                 <Card.Subtitle className={selected ? "mb-2" : "mb-2 text-muted"}>Household members: {household.beneficiaries.length}</Card.Subtitle>
                 <Card.Text>
-                    Funds in account: {household.account.distributions.filter(distribution => distribution.collected === false).reduce((acc, dist) => acc + dist.amount, 0)}
+                    {/* Calculate funds by adding the distribution amounts under the current distirbution event */}
+                    Funds in account: {household.account.distributions.filter(distribution => distribution.event_id === currentEvent).reduce((acc, dist) => acc + dist.amount, 0)}
                     {' '}{alertShow && distributionEvent.includes(household.id) ? <Badge bg="success"> +{multipleDistributionAmount * household.beneficiaries.length} IQD</Badge> : null}
                          {individualAlert ? <Badge bg="success"> +{individualAlert} IQD</Badge> : null} 
                          {individualAlert ? displayIndividualAlert() : null}
