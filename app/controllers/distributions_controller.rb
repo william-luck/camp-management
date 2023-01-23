@@ -5,6 +5,11 @@ class DistributionsController < ApplicationController
         render json: distribution, status: :created
     end
 
+    def index 
+        distributions = Distribution.all
+        render json: distributions
+    end
+
     private 
 
     def distribution_params 
