@@ -1,9 +1,9 @@
 class EventsController < ApplicationController
 
-    # def index
-    #     events = Event.all
-    #     render json: events, include: ['beneficiaries', 'count', 'account.distributions']
-    # end
+    def index
+        events = Event.all
+        render json: events
+    end
 
 
 end

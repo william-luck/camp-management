@@ -14,7 +14,7 @@ import HouseholdCard from "./HouseholdCard";
 import SuccessAlert from "./SuccessAlert";
 
 
-function HouseholdList({ households, setHouseholds }) {
+function HouseholdList({ households, setHouseholds, currentEvent }) {
 
   
     const [selectedHouseholds, setSelectedHouseholds] = useState([])
@@ -110,7 +110,7 @@ function HouseholdList({ households, setHouseholds }) {
     return (
         <div>
         <Container>
-            <div style={{fontSize: 'x-large', display:'inline-block'}}>Distribute to Households in IDP Camp || Camp Distribution 11</div>
+            <div style={{fontSize: 'x-large', display:'inline-block'}}>Distribute to Households in IDP Camp || Camp Distribution {currentEvent}</div>
             <div style={{float: 'right', display: 'inline-block'}}>
                 {selectedHouseholds.length > 0 ? <Button style={{ marginRight: "5px"}} onClick={() => setOcShow(true)}>Distribute to Selected</Button> : null }
                 {offCanvas}

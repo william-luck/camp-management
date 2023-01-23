@@ -19,6 +19,7 @@ function App() {
 
   const [user, setUser] = useState('')
   const [households, setHouseholds] = useState([])
+  const [currentEvent, setCurrentEvent] = useState(null)
   const [newHousehold, setNewHousehold] = useState(false)
   const location = useLocation();
 
@@ -32,6 +33,10 @@ function App() {
       fetch('/households')
             .then(r => r.json())
             .then(households => setHouseholds(households))
+
+      fetch('/events')
+        .then(r => r.json())
+        .then(events => setCurrentEvent(events.length))
     })
 
       
@@ -53,7 +58,7 @@ function App() {
         <Col>
           <Switch>
           <Route exact path='/home'>
-            <HouseholdList households={households} setHouseholds={setHouseholds}/>
+            <HouseholdList households={households} setHouseholds={setHouseholds} currentEvent={currentEvent}/>
           </Route>
           <Route path='/edit-hhs'>
             <EditHouseholds households={households} location={location}/>
