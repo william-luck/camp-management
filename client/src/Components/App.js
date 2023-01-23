@@ -58,7 +58,7 @@ function App() {
         <Col>
           <Switch>
           <Route exact path='/home'>
-            <HouseholdList households={households} setHouseholds={setHouseholds} currentEvent={currentEvent}/>
+            <HouseholdList households={households} setHouseholds={setHouseholds} currentEvent={currentEvent} setCurrentEvent={setCurrentEvent}/>
           </Route>
           <Route path='/edit-hhs'>
             <EditHouseholds households={households} location={location}/>

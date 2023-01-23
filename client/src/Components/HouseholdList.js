@@ -14,7 +14,7 @@ import HouseholdCard from "./HouseholdCard";
 import SuccessAlert from "./SuccessAlert";
 
 
-function HouseholdList({ households, setHouseholds, currentEvent }) {
+function HouseholdList({ households, setHouseholds, currentEvent, setCurrentEvent }) {
 
   
     const [selectedHouseholds, setSelectedHouseholds] = useState([])
@@ -22,6 +22,7 @@ function HouseholdList({ households, setHouseholds, currentEvent }) {
     const [distributionEvent, setDistributionEvent] = useState([])
     const [distributionAmount, setDistributionAmount] = useState('12000')
     const [ocShow, setOcShow] = useState(false);
+    const [newEventOcShow, setNewEventOcShow] = useState(false)
     const [alertShow, setAlertShow] = useState(false)
 
     
@@ -80,8 +81,10 @@ function HouseholdList({ households, setHouseholds, currentEvent }) {
     }
 
     function handleNewEvent(e) {
-        // I want to create a new event in the database 
 
+        setNewEventOcShow(false)
+
+        // I want to create a new event in the database 
         fetch('/events', {
             method: 'POST', 
             headers: {
@@ -90,7 +93,7 @@ function HouseholdList({ households, setHouseholds, currentEvent }) {
             body: JSON.stringify({date: new Date().toJSON().slice(0, 10)})
         })
             .then(r => r.json())
-            .then(newEvent => console.log(newEvent))
+            .then(() => setCurrentEvent(currentEvent+1))
         // Set the state value of the current event plus one
 
         // Display an alert message (popup?) of what creating a new event will do 
@@ -125,6 +128,30 @@ function HouseholdList({ households, setHouseholds, currentEvent }) {
         </Offcanvas>
     )
 
+    const newEventOffCanvas = (
+        <Offcanvas show={newEventOcShow} onHide={() => setNewEventOcShow(false)} placement='top'>
+            <Container>
+            <Offcanvas.Header closeButton>
+            <Offcanvas.Title as={'h2'}>Start new distribution?</Offcanvas.Title>
+            </Offcanvas.Header>
+            <Offcanvas.Body as="h6">
+            Starting a new distribution will create a new distribution event for the camp, and reset household account funds to zero. Continue?
+            </Offcanvas.Body>
+            <Offcanvas.Body>
+                <div>
+                    <Button onClick={() => handleNewEvent()} style={{display: 'inline-block'}}>Confirm</Button>
+                    {' '}
+                    <Button onClick={() => setNewEventOcShow(false)} style={{display: 'inline-block'}} variant='danger'>Cancel</Button>
+
+                </div>
+                
+
+            </Offcanvas.Body>
+
+            </Container>
+        </Offcanvas>
+    )
+
 
 
     return (
@@ -132,13 +159,14 @@ function HouseholdList({ households, setHouseholds, currentEvent }) {
         <Container>
             <div>
                 <div style={{fontSize: 'x-large', display: 'inline-block'}}>Camp Distribution {currentEvent}</div>
-                <div style={{ float: 'right', display: 'inline-block'}}><Button onClick={() => handleNewEvent()}>New Distribution Event</Button></div>
+                <div style={{ float: 'right', display: 'inline-block'}}><Button onClick={() => setNewEventOcShow(true)}>New Distribution Event</Button></div>
             </div>
             <p></p>
             <div style={{fontSize: 'x-large', display:'inline-block'}}>Distribute to Households in IDP Camp</div>
             <div style={{float: 'right', display: 'inline-block'}}>
                 {selectedHouseholds.length > 0 ? <Button style={{ marginRight: "5px"}} onClick={() => setOcShow(true)}>Distribute to Selected</Button> : null }
                 {offCanvas}
+                {newEventOffCanvas}
                 <Button onClick={() => handleSelectAll()}>{selectedHouseholds.length === households.length ? 'Deselect All' : "Select All"}</Button>
             </div>
             
