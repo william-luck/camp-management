@@ -4,6 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Button from "react-bootstrap/esm/Button";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
+import Alert from 'react-bootstrap/Alert';
 
 function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHouseholdMember, setNewHouseholdMemberConfirm, setNewHousehold, location, user, households}) {
 
@@ -14,6 +15,8 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
     const [phoneNumber, setPhoneNumber] = useState('')
     const [idNumber, setIdNumber] = useState('')
     const [address, setAddress] = useState('')
+
+    const [errors, setErrors] = useState([])
 
     const history = useHistory() 
 
@@ -27,9 +30,6 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
             national_id_number: idNumber,
         }
 
-        // head_of_HH: false, 
-        // household_id: household.id
-        // address: 
 
         return formData;
 
@@ -53,8 +53,6 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
         })
             .then(r => r.json())
             .then(createdHousehold => {
-
-                console.log(createdHousehold)
 
 
                 // then takes the form data and adds the inputted beneficiary as the head of HH, and uses the ID from the househohld created in the previous fetch request
@@ -91,7 +89,6 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
                                 setNewHousehold(createdHousehold)
 
                                 history.push('/edit-hhs')
-                                setTimeout(() => setNewHousehold(false), 5000)
                                 
 
                             })
@@ -113,15 +110,18 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
             },
             body: JSON.stringify(beneficiaryCreation)
         })
-            .then(response => response.json())
-            .then(newBeneficiary => {
-                setNewHouseholdMemberConfirm(newBeneficiary)
-                household.beneficiaries.push(newBeneficiary)
-                setTimeout(() => setNewHouseholdMemberConfirm(false), 3000)
+            .then(response => {
+                if (response.ok) {
+                    response.json().then(newBeneficiary => {
+                        setNewHouseholdMemberConfirm(newBeneficiary)
+                        household.beneficiaries.push(newBeneficiary)
+                        setTimeout(() => setNewHouseholdMemberConfirm(false), 3000)
+                        }).then(() => setAddNewHouseholdMember(!addNewHouseholdMember))
+                } else {
+                    response.json().then(errors => setErrors(errors.errors))
+                }
             })
-            .then(() => {
-                setAddNewHouseholdMember(!addNewHouseholdMember)
-            })
+
     }
 
     function handleSubmit(e) {
@@ -185,6 +185,13 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
                     <Form.Control placeholder="Enter the new household's address " value={address} onChange={e => setAddress(e.target.value)}/>
                 </Form.Group>
             : null}
+
+            {errors.length > 0 ? <Alert variant="danger" dismissible onClose={() => setErrors([])}>
+                The following errors occured: 
+                <ul>
+                    {errors.map(error => <li>{error}</li>)}
+                </ul>
+            </Alert> : null}
 
             <Button variant="primary" type="submit">
                 {location.pathname === '/add-new-hh' ? 'Create Household' : 'Add New Member'}
