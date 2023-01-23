@@ -111,15 +111,20 @@ function HouseholdList({ households, setHouseholds, currentEvent }) {
     return (
         <div>
         <Container>
+        <div>
+                <div style={{fontSize: 'x-large', display: 'inline-block'}}>Camp Distribution {currentEvent}</div>
+                <div style={{ float: 'right', display: 'inline-block'}}><Button onClick={() => console.log('ive been clicked')}>New Distribution Event</Button></div>
+            </div>
+            <p></p>
             <div style={{fontSize: 'x-large', display:'inline-block'}}>Distribute to Households in IDP Camp</div>
             <div style={{float: 'right', display: 'inline-block'}}>
                 {selectedHouseholds.length > 0 ? <Button style={{ marginRight: "5px"}} onClick={() => setOcShow(true)}>Distribute to Selected</Button> : null }
                 {offCanvas}
                 <Button onClick={() => handleSelectAll()}>{selectedHouseholds.length === households.length ? 'Deselect All' : "Select All"}</Button>
             </div>
-            <div style={{fontSize: 'large'}}>Camp Distribution {currentEvent}</div>
-            {alertShow ? <SuccessAlert setAlertShow={setAlertShow} distributionAmount={distributionAmount} distributionEvent={distributionEvent} households={households}/> : null}
+            
             <p></p>
+            {alertShow ? <SuccessAlert setAlertShow={setAlertShow} distributionAmount={distributionAmount} distributionEvent={distributionEvent} households={households}/> : null}
 
             <div style={{maxHeight: '725px', overflowY: 'scroll'}}>
             <Form>
