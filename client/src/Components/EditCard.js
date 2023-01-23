@@ -16,7 +16,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import Alert from 'react-bootstrap/Alert';
 
 
-function EditCard({ household, setSelectedHousehold, selectedHousehold, location }) {
+function EditCard({ household, setSelectedHousehold, selectedHousehold, location, newHousehold }) {
 
     const [headOfHHShow, setHeadOfHHShow] = useState(false);
     const [headOfHHConfirm, setHeadOfHHConfirm] = useState(false)
@@ -201,7 +201,7 @@ function EditCard({ household, setSelectedHousehold, selectedHousehold, location
                 {/* Head of HH overview */}
                 <Col xs={5}>
                     <Card.Body>
-                        <Card.Title style={headOfHHShow ? {display: 'inline-block', color: 'green'} : {display: 'inline-block'}}>Head of HH: {headOfHousehold.name}
+                        <Card.Title style={headOfHHShow ? {display: 'inline-block', color: 'green'} : {display: 'inline-block'}}>Head of HH: {headOfHousehold.name} 
                         {' '}
                         <Button 
                             variant="link"
@@ -215,6 +215,7 @@ function EditCard({ household, setSelectedHousehold, selectedHousehold, location
                         </Card.Title>
                         <Card.Subtitle className="mb-2 text-muted">National ID number: {headOfHousehold.national_id_number}</Card.Subtitle>
                         <Card.Subtitle className="mb-2 text-muted">Phone Number: {headOfHousehold.phone_number}</Card.Subtitle>
+                        <Badge bg='success'>{newHousehold.id === household.id ? 'Newly added. Please add additional household members if necessary' : null}</Badge>
                         
                     </Card.Body>
                 </Col>

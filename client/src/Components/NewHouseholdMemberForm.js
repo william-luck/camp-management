@@ -91,7 +91,8 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
                                 setNewHousehold(createdHousehold)
 
                                 history.push('/edit-hhs')
-                                // Set state for scrolling.. 
+                                setTimeout(() => setNewHousehold(false), 5000)
+                                
 
                             })
                     })

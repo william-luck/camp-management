@@ -8,6 +8,7 @@ import Form from 'react-bootstrap/Form';
 import Button from "react-bootstrap/esm/Button";
 import Badge from 'react-bootstrap/Badge';
 
+
 function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, alertShow, multipleDistributionAmount, distributionEvent, currentEvent }) {
 
     const [selected, setSelected] = useState(false)

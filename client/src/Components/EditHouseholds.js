@@ -7,18 +7,18 @@ function EditHouseholds( {households, location, newHousehold, setNewHousehold}) 
 
     const scroll = useRef(null)
 
-    // When new household is added to the database, I want to activate scroll.scrollIntoView()
-    // useEffect(() => {
-    //     if (newHousehold) {
-    //         scroll.scrollIntoView()
-    //     }
-    // }, [])
+    // if (newHousehold) {
+    //     if (scroll.current ) {
+    //         scroll.current.scrollIntoView(true)
+    // }
+    // }
 
-    if (newHousehold) {
-        if (scroll.current) {
+    useEffect(() => {
+        if (scroll.current && newHousehold) {
             scroll.current.scrollIntoView({behavior: 'smooth'})
         }
-    }
+    }, [newHousehold])
+
 
 
 
@@ -28,13 +28,18 @@ function EditHouseholds( {households, location, newHousehold, setNewHousehold}) 
         <Container>
         <div style={{fontSize: 'x-large', display:'inline-block'}}>Edit Camp Households</div>
         {households.map(household => {
-            return <EditCard household={household} key={household.id} location={location}/>
+            return <EditCard household={household} key={household.id} location={location} newHousehold={newHousehold}/>
         })}
-        </Container>
+
         <div ref={scroll}></div>
+        
+        </Container>
+        
         
         </div>
     )
+
 }
+
 
 export default EditHouseholds;
