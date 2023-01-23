@@ -33,6 +33,8 @@ function App() {
             .then(r => r.json())
             .then(households => setHouseholds(households))
     })
+
+      
   }, [newHousehold])
 
   if (!user) return <Login setUser={setUser} />
