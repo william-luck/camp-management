@@ -23,6 +23,8 @@ User.create(username: 'camp_manager', password: 'test_password', email: 'managem
     Event.create(date: generate_distribution_date(count))
 end
 
+Event.create(date: Date.today)
+
 # Create 20 HHs, with 3 - 8 beneficiaries each, with one head of HH
 20.times do |count|
     household = Household.create(date_of_entry: Faker::Date.between(from: '2014-07-01', to: '2021-12-31'), address: "#{rand(1..50)}#{('A'..'Z').to_a.sample}")

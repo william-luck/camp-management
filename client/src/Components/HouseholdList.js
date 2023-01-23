@@ -55,7 +55,8 @@ function HouseholdList({ households, setHouseholds, currentEvent }) {
                 account_id: selectedHousehold,
                 amount: household.beneficiaries.length * parseInt(distributionAmount),
                 date: new Date().toJSON().slice(0, 10),
-                collected: false
+                collected: false, 
+                event_id: currentEvent
             }
             
             fetch(`/distributions`, {
@@ -110,12 +111,13 @@ function HouseholdList({ households, setHouseholds, currentEvent }) {
     return (
         <div>
         <Container>
-            <div style={{fontSize: 'x-large', display:'inline-block'}}>Distribute to Households in IDP Camp || Camp Distribution {currentEvent}</div>
+            <div style={{fontSize: 'x-large', display:'inline-block'}}>Distribute to Households in IDP Camp</div>
             <div style={{float: 'right', display: 'inline-block'}}>
                 {selectedHouseholds.length > 0 ? <Button style={{ marginRight: "5px"}} onClick={() => setOcShow(true)}>Distribute to Selected</Button> : null }
                 {offCanvas}
                 <Button onClick={() => handleSelectAll()}>{selectedHouseholds.length === households.length ? 'Deselect All' : "Select All"}</Button>
             </div>
+            <div style={{fontSize: 'large'}}>Camp Distribution {currentEvent}</div>
             {alertShow ? <SuccessAlert setAlertShow={setAlertShow} distributionAmount={distributionAmount} distributionEvent={distributionEvent} households={households}/> : null}
             <p></p>
 
@@ -131,6 +133,7 @@ function HouseholdList({ households, setHouseholds, currentEvent }) {
                     alertShow={alertShow}
                     multipleDistributionAmount={distributionAmount}
                     distributionEvent={distributionEvent}
+                    currentEvent={currentEvent}
                 />
                 )
             })}

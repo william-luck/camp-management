@@ -8,7 +8,7 @@ import Form from 'react-bootstrap/Form';
 import Button from "react-bootstrap/esm/Button";
 import Badge from 'react-bootstrap/Badge';
 
-function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, alertShow, multipleDistributionAmount, distributionEvent }) {
+function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, alertShow, multipleDistributionAmount, distributionEvent, currentEvent }) {
 
     const [selected, setSelected] = useState(false)
     const [distributionAmount, setDistributionAmount] = useState('12000')
@@ -31,7 +31,8 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
             account_id: household.id,
             amount: household.beneficiaries.length * parseInt(distributionAmount),
             date: new Date().toJSON().slice(0, 10),
-            collected: false
+            collected: false,
+            event_id: currentEvent
         }
 
         fetch(`/distributions`, {

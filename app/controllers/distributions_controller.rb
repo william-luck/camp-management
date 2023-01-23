@@ -13,6 +13,6 @@ class DistributionsController < ApplicationController
     private 
 
     def distribution_params 
-        params.permit(:account_id, :amount, :date, :collected)
+        params.permit(:account_id, :amount, :date, :collected, :event_id)
     end
 end
