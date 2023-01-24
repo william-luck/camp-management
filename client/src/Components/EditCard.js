@@ -16,7 +16,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import Alert from 'react-bootstrap/Alert';
 
 
-function EditCard({ household, setSelectedHousehold, selectedHousehold, location, newHousehold }) {
+function EditCard({ household, setSelectedHousehold, selectedHousehold, location, newHousehold, user }) {
 
     const [headOfHHShow, setHeadOfHHShow] = useState(false);
     const [headOfHHConfirm, setHeadOfHHConfirm] = useState(false)
@@ -156,13 +156,7 @@ function EditCard({ household, setSelectedHousehold, selectedHousehold, location
                     response.json().then(errors => setErrors(errors.errors))
                 }
             })
-            // .then(response => response.json())
-            // .then(change => {
-            //     household.beneficiaries.find(beneficiary => beneficiary.id === change.id).phone_number = change.phone_number
-            //     household.beneficiaries.find(beneficiary => beneficiary.id === change.id).national_id_number = change.national_id_number
-            //     setHouseHoldinfoConfirm(change)
-            //     setTimeout(() => setHouseHoldinfoConfirm(false), 3000)
-            // })
+
     }
 
     function handleDeleteMember(e, beneficiary) {
@@ -197,6 +191,14 @@ function EditCard({ household, setSelectedHousehold, selectedHousehold, location
 
     }
 
+    function permissionCheck() {
+        if (household.account.user_id !== user.id) {
+            return true
+        } else {
+            return false
+        }
+    }
+
     if (householdDeleteConfirm === 'alert') {
         return <Alert variant="danger">Household headed by {headOfHousehold.name} has been removed from the camp. All beneficiaries within the household have also been deleted.</Alert>
     }
@@ -227,6 +229,7 @@ function EditCard({ household, setSelectedHousehold, selectedHousehold, location
                             aria-expanded={headOfHHShow}
                             style={{display: "inline-block"}}
                             size='sm'
+                            disabled={permissionCheck()}
                         >{!headOfHHShow ? 'Edit' : 'Hide'}</Button>
                         {headOfHHConfirm ? <Badge bg='success'>Saved</Badge> : null }
                         </Card.Title>
@@ -251,9 +254,14 @@ function EditCard({ household, setSelectedHousehold, selectedHousehold, location
                             aria-controls="edit-address"
                             aria-expanded={addressShow}
                             style={{display: 'inline-block'}}
+                            disabled={permissionCheck()}
                         >{!addressShow ? 'Edit' : 'Hide'}</Button>
                         {addressConfirm ? <Badge bg='success'>Saved</Badge> : null }
                         </Card.Title>
+                        <br></br>
+
+                        {permissionCheck() ? <Badge bg="secondary" size='sm'>You are not responsible for this household.</Badge> : null}
+                        
                         
                     </Card.Body>
                 </Col>
@@ -270,6 +278,7 @@ function EditCard({ household, setSelectedHousehold, selectedHousehold, location
                             aria-controls="edit-household-information"
                             aria-expanded={householdInfoShow}
                             style={{display: 'inline-block'}}
+                            disabled={permissionCheck()}
                         >{!householdInfoShow ? 'Expand' : 'Hide'}</Button>    
                     </Card.Body>
                 </Col>

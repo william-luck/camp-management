@@ -3,7 +3,7 @@ import Container from "react-bootstrap/esm/Container";
 import EditCard from "./EditCard";
 import { useRef } from "react";
 
-function EditHouseholds( {households, location, newHousehold, setNewHousehold}) {
+function EditHouseholds( {households, location, newHousehold, setNewHousehold, user}) {
 
     const scroll = useRef(null)
 
@@ -28,7 +28,7 @@ function EditHouseholds( {households, location, newHousehold, setNewHousehold}) 
         <Container>
         <div style={{fontSize: 'x-large', display:'inline-block'}}>Edit Camp Households</div>
         {households.map(household => {
-            return <EditCard household={household} key={household.id} location={location} newHousehold={newHousehold}/>
+            return <EditCard household={household} key={household.id} location={location} newHousehold={newHousehold} user={user}/>
         })}
 
         <div ref={scroll}></div>

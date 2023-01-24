@@ -39,9 +39,6 @@ function HouseholdList({ households, setHouseholds, currentEvent, setCurrentEven
         } else {
             // add all HHs to selected HH array
             let tempSelected = []
-            // for (let i=1; i < selectedHouseholdsAllInfo.length+1; i++) {
-            //     tempSelected.push(i)
-            // }
             for (const household of selectedHouseholdsAllInfo) {
                 tempSelected.push(household.id)
             }
