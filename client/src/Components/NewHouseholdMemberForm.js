@@ -26,7 +26,7 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
             name:  firstName + ' ' + lastName,
             gender: gender,
             DOB: dateOfBirth,
-            phone_number: phoneNumber,
+            phone_number: '964-' + phoneNumber.replace(/[^\d]/g, ''),
             national_id_number: idNumber,
         }
 
@@ -243,7 +243,12 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
 
             <Form.Group className="mb-3">
                 <Form.Label>Phone Number*</Form.Label>
+                <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon3">
+                +964-
+                </InputGroup.Text>    
                 <Form.Control placeholder='Enter phone number' value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)}/>
+                </InputGroup>
             </Form.Group>
 
             <Form.Group className="mb-3">
