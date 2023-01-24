@@ -4,4 +4,7 @@ class Household < ApplicationRecord
     has_one :account
     has_many :distributions, through: :account
 
+    validates_associated :beneficiaries
+    # validates :address, presence: true
+
 end

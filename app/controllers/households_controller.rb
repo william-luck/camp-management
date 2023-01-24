@@ -1,5 +1,7 @@
 class HouseholdsController < ApplicationController
 
+    rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_data_error
+
     def index
         households = Household.all
         render json: households, include: ['beneficiaries', 'count', 'account.distributions']
@@ -31,6 +33,10 @@ class HouseholdsController < ApplicationController
 
     def household_params
         params.permit(:address, :date_of_entry)
+    end
+
+    def render_invalid_data_error(invalid)
+        render json: {errors: invalid.record.errors.full_messages}, status: :unprocessable_entity
     end
     
 end

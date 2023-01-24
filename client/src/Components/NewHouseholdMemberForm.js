@@ -35,67 +35,69 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
 
     }
 
-    function createHouseholdAndAccount() {
-        // This function should create the household, the account, and the beneficiary as head of HH (three seperate post requests, in that order)
-
-        let householdCreation = {
-            address: address,
-            date_of_entry: new Date().toJSON().slice(0, 10)
-        }
-
-        // First creates a household using the form address and today's date
-        fetch(`/households`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(householdCreation)
-        })
-            .then(r => r.json())
-            .then(createdHousehold => {
+    // function createHouseholdAndAccount() {
 
 
-                // then takes the form data and adds the inputted beneficiary as the head of HH, and uses the ID from the househohld created in the previous fetch request
-                let newHouseholdData = householdMemberObject()
-                newHouseholdData.head_of_HH = true
-                newHouseholdData.household_id = createdHousehold.id
+    //     // This function should create the household, the account, and the beneficiary as head of HH (three seperate post requests, in that order)
 
-                fetch(`beneficiaries`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(newHouseholdData)
-                })
-                    .then(r => r.json())
-                    .then((createdBeneficiary) => {
-                        // then I want to create the account for the beneficiary, 
+    //     let householdCreation = {
+    //         address: address,
+    //         date_of_entry: new Date().toJSON().slice(0, 10)
+    //     }
 
-                        console.log(createdBeneficiary)
+    //     // First creates a household using the form address and today's date
+    //     fetch(`/households`, {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify(householdCreation)
+    //     })
+    //         .then(r => r.json())
+    //         .then(createdHousehold => {
 
-                        fetch(`accounts`, {
-                            method: 'POST', 
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                user_id: user.id,
-                                household_id: createdHousehold.id, 
-                                funds: 0
-                            })
-                        })
-                            .then(r => r.json())
-                            .then(newAccount => {
-                                setNewHousehold(createdHousehold)
 
-                                history.push('/edit-hhs')
+    //             // then takes the form data and adds the inputted beneficiary as the head of HH, and uses the ID from the househohld created in the previous fetch request
+    //             let newHouseholdData = householdMemberObject()
+    //             newHouseholdData.head_of_HH = true
+    //             newHouseholdData.household_id = createdHousehold.id
+
+    //             fetch(`beneficiaries`, {
+    //                 method: 'POST',
+    //                 headers: {
+    //                     'Content-Type': 'application/json'
+    //                 },
+    //                 body: JSON.stringify(newHouseholdData)
+    //             })
+    //                 .then(r => r.json())
+    //                 .then((createdBeneficiary) => {
+    //                     // then I want to create the account for the beneficiary, 
+
+
+    //                     fetch(`accounts`, {
+    //                         method: 'POST', 
+    //                         headers: {
+    //                             'Content-Type': 'application/json'
+    //                         },
+    //                         body: JSON.stringify({
+    //                             user_id: user.id,
+    //                             household_id: createdHousehold.id, 
+    //                             funds: 0
+    //                         })
+    //                     })
+    //                         .then(r => r.json())
+    //                         .then(newAccount => {
+    //                             setNewHousehold(createdHousehold)
+
+    //                             history.push('/edit-hhs')
                                 
 
-                            })
-                    })
+    //                         })
+    //                 })
                 
-            })
-    }
+    //         })
+    // }
+
 
     function createBeneficiary(e) {
 
@@ -129,12 +131,84 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
         e.preventDefault()
 
         if (location.pathname === '/add-new-hh') {
-            createHouseholdAndAccount()
+            // createHouseholdAndAccount()
+            newArrival()
         } else {
             createBeneficiary(e)
         }
 
         clearFormData(e)
+
+    }
+
+    function newArrival() {
+
+        let householdCreation = {
+            address: address,
+            date_of_entry: new Date().toJSON().slice(0, 10)
+        }
+
+        fetch('/households', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(householdCreation)
+        })
+            .then(response => {
+                if (response.ok) {
+                    response.json().then(createdHousehold => {
+
+                    // take the data and create beneficiary 
+                    let newBeneficiaryData = householdMemberObject()
+                    newBeneficiaryData.head_of_HH = true
+                    newBeneficiaryData.household_id = createdHousehold.id
+
+                    fetch('/beneficiaries', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(newBeneficiaryData)
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                response.json().then(createdBeneficiary => {
+                                    // Create the account
+                                    fetch(`accounts`, {
+                                        method: 'POST', 
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({
+                                            user_id: user.id,
+                                            household_id: createdHousehold.id, 
+                                            funds: 0
+                                        })
+                                    })
+                                        .then(response => response.json())
+                                        .then(() => {
+                                            setNewHousehold(createdHousehold)
+                                            history.push('/edit-hhs')
+                                        })
+                                })
+                            } else {
+                                // Add errors to household errors
+                                response.json().then(beneficiaryErrors => {
+                                    setErrors(...errors, beneficiaryErrors.errors)
+                                })
+                            }
+                        })
+                    })
+                } 
+                // else {
+                //     // Error for household address, should only be one array element
+                //     response.json().then(errors => setErrors(errors.errors))
+
+                //     // Do I want to try creating beneficiary anyway? But I need the created household ID to create the beneficiary...
+                    
+                // }
+            })
 
     }
 
@@ -150,9 +224,8 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
     }
 
     return (
-        <Form onSubmit={handleSubmit}>
-                        
-            <Form.Label>Name and Gender</Form.Label>
+        <Form onSubmit={handleSubmit}>  
+            <Form.Label>Name and Gender*</Form.Label><Form.Text style={{float: 'right'}}>* indicates required field</Form.Text>
             <InputGroup className="mb-3">                
                 <Form.Control placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                 <Form.Control placeholder="Last Name" value={lastName} onChange={e => setLastName(e.target.value)}/>
@@ -164,17 +237,17 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
             </InputGroup>
 
             <Form.Group className="mb-3">
-                <Form.Label>Date of Birth</Form.Label>
+                <Form.Label>Date of Birth*</Form.Label>
                 <Form.Control type="date" onChange={e => setDateOfBirth(e.target.value)}/>
             </Form.Group>
 
             <Form.Group className="mb-3">
-                <Form.Label>Phone Number</Form.Label>
+                <Form.Label>Phone Number*</Form.Label>
                 <Form.Control placeholder='Enter phone number' value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)}/>
             </Form.Group>
 
             <Form.Group className="mb-3">
-                <Form.Label>National ID Number</Form.Label>
+                <Form.Label>National ID Number*</Form.Label>
                 <Form.Control placeholder='Enter national ID number' value={idNumber} onChange={e => setIdNumber(e.target.value)}/>
             </Form.Group>
 
@@ -192,6 +265,8 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
                     {errors.map(error => <li>{error}</li>)}
                 </ul>
             </Alert> : null}
+
+            <br></br>
 
             <Button variant="primary" type="submit">
                 {location.pathname === '/add-new-hh' ? 'Create Household' : 'Add New Member'}
