@@ -29,7 +29,7 @@ Event.create(date: Date.today)
 20.times do |count|
     household = Household.create(date_of_entry: Faker::Date.between(from: '2014-07-01', to: '2021-12-31'), address: "#{rand(1..50)}#{('A'..'Z').to_a.sample}")
 
-    phone_number = "+964-#{rand(100000000..9999999999)}"
+    phone_number = "+964-#{rand(1000000000..9999999999)}"
 
     rand(2..7).times do |count|
         Beneficiary.create(
@@ -37,7 +37,7 @@ Event.create(date: Date.today)
             gender: Faker::Gender.binary_type,
             DOB: Faker::Date.between(from: '1952-01-01', to: '2021-12-31'),
             phone_number: phone_number,
-            national_id_number: rand(10000000..999999999),
+            national_id_number: rand(100000000..999999999),
             head_of_HH: false,
             household_id: household.id
         )
@@ -48,7 +48,7 @@ Event.create(date: Date.today)
             gender: Faker::Gender.binary_type,
             DOB: Faker::Date.between(from: '1952-01-01', to: '1980-12-31'),
             phone_number: phone_number,
-            national_id_number: rand(10000000..999999999),
+            national_id_number: rand(100000000..999999999),
             head_of_HH: true,
             household_id: household.id
         )

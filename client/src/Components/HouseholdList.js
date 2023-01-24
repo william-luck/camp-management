@@ -16,7 +16,7 @@ import SuccessAlert from "./SuccessAlert";
 import Alert from 'react-bootstrap/Alert';
 
 
-function HouseholdList({ households, setHouseholds, currentEvent, setCurrentEvent }) {
+function HouseholdList({ households, setHouseholds, currentEvent, setCurrentEvent, user }) {
 
   
     const [selectedHouseholds, setSelectedHouseholds] = useState([])
@@ -202,6 +202,7 @@ function HouseholdList({ households, setHouseholds, currentEvent, setCurrentEven
                     multipleDistributionAmount={distributionAmount}
                     distributionEvent={distributionEvent}
                     currentEvent={currentEvent}
+                    user={user}
                 />
                 )
             })}

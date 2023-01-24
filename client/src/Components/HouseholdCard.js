@@ -9,14 +9,17 @@ import Button from "react-bootstrap/esm/Button";
 import Badge from 'react-bootstrap/Badge';
 
 
-function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, alertShow, multipleDistributionAmount, distributionEvent, currentEvent }) {
+function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, alertShow, multipleDistributionAmount, distributionEvent, currentEvent, user }) {
 
     const [selected, setSelected] = useState(false)
     const [distributionAmount, setDistributionAmount] = useState('12000')
 
     const [individualAlert, setIndividualAlert] = useState(false)
 
+    const [errors, setErrors] = useState([])
+
     const headOfHH = household.beneficiaries.filter(beneficiary => beneficiary.head_of_HH)[0]
+
 
 
 
@@ -37,6 +40,12 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
             event_id: currentEvent
         }
 
+        // If user ID (lives in state in App), continue, if not, set errors that you are not responsible for them. 
+
+        // if (user.id !== household.account.user_id) {
+        //     console.log('you are not responsible for this household')
+        // }
+
         fetch(`/distributions`, {
             method: 'POST',
             headers: {
@@ -54,6 +63,17 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
 
     function displayIndividualAlert() {
         setTimeout(() => setIndividualAlert(false), 3000)
+    }
+
+    function permission() {
+        if ((user.id !== household.account.user_id) || (selectedHouseholds.length > 0)) {
+            return true
+        } else {
+            return false
+        }
+
+        // selectedHouseholds.length > 0 ? true : false}
+
     }
        
 
@@ -112,12 +132,13 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
                 <br></br>
                 <Row>
                 <Col>
-                    <Form.Control placeholder="amount" value={distributionAmount} onChange={e => setDistributionAmount(e.target.value)} style={{display: "inline-block"}} disabled={selectedHouseholds.length > 0 ? true : false}/>
+                    <Form.Control placeholder="amount" value={distributionAmount} onChange={e => setDistributionAmount(e.target.value)} style={{display: "inline-block"}} disabled={permission()}/>
                 </Col>
                 <Col>
-                    <Button variant ="dark"style={{display: "inline-block"}} onClick={() => handleDistribute()} disabled={selectedHouseholds.length > 0 ? true : false}>Distribute</Button>
+                    <Button variant ="dark"style={{display: "inline-block"}} onClick={() => handleDistribute()} disabled={permission()}>Distribute</Button>
                 </Col>
                 </Row>
+                {user.id !== household.account.user_id ? <Form.Text>Unable to distribute. You are not responsible for this household.</Form.Text> : null}
                 </Col>
         
             

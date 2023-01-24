@@ -26,7 +26,7 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
             name:  firstName + ' ' + lastName,
             gender: gender,
             DOB: dateOfBirth,
-            phone_number: '964-' + phoneNumber.replace(/[^\d]/g, ''),
+            phone_number: '+964-' + phoneNumber.replace(/[^\d]/g, ''),
             national_id_number: idNumber,
         }
 

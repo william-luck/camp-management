@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
   
-  resources :events
-  resources :users
-  resources :distributions
-  resources :accounts
+  resources :events, only: [:index, :update, :create]
+  resources :users, only: [:show, :create]
+  resources :distributions, only: [:index, :create]
+  resources :accounts, only: [:index, :update, :create]
   resources :households
-  resources :beneficiaries
+  resources :beneficiaries, only: [:create, :update, :destroy]
 
   post '/login', to: 'sessions#create'
   get '/me', to: 'users#show'
