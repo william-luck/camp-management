@@ -7,16 +7,12 @@ function EditHouseholds( {households, location, newHousehold, setNewHousehold, u
 
     const scroll = useRef(null)
 
-    // if (newHousehold) {
-    //     if (scroll.current ) {
-    //         scroll.current.scrollIntoView(true)
-    // }
-    // }
 
     useEffect(() => {
         if (scroll.current && newHousehold) {
             scroll.current.scrollIntoView({behavior: 'smooth'})
         }
+        setTimeout(() => setNewHousehold(''), 3000)
     }, [newHousehold])
 
 
