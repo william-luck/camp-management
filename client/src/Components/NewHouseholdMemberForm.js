@@ -119,6 +119,7 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
                         household.beneficiaries.push(newBeneficiary)
                         setTimeout(() => setNewHouseholdMemberConfirm(false), 3000)
                         }).then(() => setAddNewHouseholdMember(!addNewHouseholdMember))
+                        clearFormData(e)
                 } else {
                     response.json().then(errors => setErrors(errors.errors))
                 }
@@ -136,8 +137,6 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
         } else {
             createBeneficiary(e)
         }
-
-        clearFormData(e)
 
     }
 
