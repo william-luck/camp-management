@@ -41,11 +41,13 @@ function EditCard({ household, setSelectedHousehold, selectedHousehold, location
 
     const [accordionKey, setAccordionKey] = useState(1)
 
+    const [errors, setErrors] = useState([])
+
 
 
     function handleIDandAddressClick(beneficiary) {
         setNationalIdNumberValue(beneficiary.national_id_number)
-        setPhoneNumberValue(beneficiary.phone_number)
+        setPhoneNumberValue(beneficiary.phone_number.slice(5))
         setSelectedBeneficiary(beneficiary)
     }
 
@@ -125,10 +127,10 @@ function EditCard({ household, setSelectedHousehold, selectedHousehold, location
     function handlePhoneOrIDSubmit(e) {
         e.preventDefault()
         
-        setAccordionKey(accordionKey+1)
+        
 
         let updatedData = {
-            phone_number: phoneNumberValue,
+            phone_number: '+964-' + phoneNumberValue.replace(/[^\d]/g, ''),
             national_id_number: nationalIdNumberValue
         }
 
@@ -139,13 +141,28 @@ function EditCard({ household, setSelectedHousehold, selectedHousehold, location
             },
             body: JSON.stringify(updatedData)
         })
-            .then(response => response.json())
-            .then(change => {
-                household.beneficiaries.find(beneficiary => beneficiary.id === change.id).phone_number = change.phone_number
-                household.beneficiaries.find(beneficiary => beneficiary.id === change.id).national_id_number = change.national_id_number
-                setHouseHoldinfoConfirm(change)
-                setTimeout(() => setHouseHoldinfoConfirm(false), 3000)
+            .then(response => {
+                if (response.ok) {
+                    // The usual
+                    response.json().then(change => {
+                        household.beneficiaries.find(beneficiary => beneficiary.id === change.id).phone_number = change.phone_number
+                        household.beneficiaries.find(beneficiary => beneficiary.id === change.id).national_id_number = change.national_id_number
+                        setHouseHoldinfoConfirm(change)
+                        setTimeout(() => setHouseHoldinfoConfirm(false), 3000)
+
+                        setAccordionKey(accordionKey+1)
+                    })
+                } else {
+                    response.json().then(errors => setErrors(errors.errors))
+                }
             })
+            // .then(response => response.json())
+            // .then(change => {
+            //     household.beneficiaries.find(beneficiary => beneficiary.id === change.id).phone_number = change.phone_number
+            //     household.beneficiaries.find(beneficiary => beneficiary.id === change.id).national_id_number = change.national_id_number
+            //     setHouseHoldinfoConfirm(change)
+            //     setTimeout(() => setHouseHoldinfoConfirm(false), 3000)
+            // })
     }
 
     function handleDeleteMember(e, beneficiary) {
@@ -317,13 +334,18 @@ function EditCard({ household, setSelectedHousehold, selectedHousehold, location
                                         <Form onSubmit={handlePhoneOrIDSubmit}>
                                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                                 <Form.Label>National ID number</Form.Label>
-                                                <Form.Control placeholder="address" value={nationalIdNumberValue} onChange={(e) => setNationalIdNumberValue(e.target.value)}/>
+                                                <Form.Control placeholder="national ID number (eight characters)" value={nationalIdNumberValue} onChange={(e) => setNationalIdNumberValue(e.target.value)}/>
                                             </Form.Group>
 
                                             <Form.Group className="mb-3" controlId="formBasicEmail">
                                                 <Form.Label>Phone number</Form.Label>
-                                                <Form.Control placeholder="address" value={phoneNumberValue} onChange={e => setPhoneNumberValue(e.target.value)}/>
+                                                <InputGroup className="mb-3">
+                                                <InputGroup.Text id="basic-addon3">+964-</InputGroup.Text>    
+                                                <Form.Control placeholder="phone number (15 characters including country code)" value={phoneNumberValue} onChange={e => setPhoneNumberValue(e.target.value)}/>
+                                                </InputGroup>
                                             </Form.Group>
+
+                                            {errors.length > 0 ? <Alert variant='danger' dismissible onClose={() => setErrors([])}><ul>{errors.map(error => <li>{error}</li>)}</ul></Alert> : null}
 
                                             <Row>
                                             <Col className="text-center">

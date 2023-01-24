@@ -244,9 +244,7 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
             <Form.Group className="mb-3">
                 <Form.Label>Phone Number*</Form.Label>
                 <InputGroup className="mb-3">
-                <InputGroup.Text id="basic-addon3">
-                +964-
-                </InputGroup.Text>    
+                <InputGroup.Text id="basic-addon3">+964-</InputGroup.Text>    
                 <Form.Control placeholder='Enter phone number' value={phoneNumber} onChange={e => setPhoneNumber(e.target.value)}/>
                 </InputGroup>
             </Form.Group>
