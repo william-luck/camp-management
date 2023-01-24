@@ -75,6 +75,14 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
         // selectedHouseholds.length > 0 ? true : false}
 
     }
+
+    function permission_select() {
+        if (user.id !== household.account.user_id) {
+            return true
+        } else {
+            return false
+        }
+    }
        
 
     return (
@@ -87,7 +95,7 @@ function HouseholdCard({ household, selectedHouseholds, setSelectedHouseholds, a
                 <br></br>
                 <Container>
                 <Form.Group className="mb-3" controlId={`${household.id}`}>
-                <Form.Check type="checkbox" checked={selected ? true : false} onChange={(e) => {
+                <Form.Check type="checkbox" checked={selected ? true : false} disabled={permission_select()} onChange={(e) => {
                     if (selected) {
                         // Change appearance of box
                         setSelected(!selected) 

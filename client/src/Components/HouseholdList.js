@@ -31,13 +31,15 @@ function HouseholdList({ households, setHouseholds, currentEvent, setCurrentEven
     
 
     function handleSelectAll() {
+
+        let selectedHouseholdsAllInfo = households.filter(household => household.account.user_id === user.id)
         // if all already selected, deselect all
-        if (selectedHouseholds.length === households.length) {
+        if (selectedHouseholds.length === households.filter(household => household.account.user_id === user.id).length) {
             setSelectedHouseholds([])
         } else {
             // add all HHs to selected HH array
             let tempSelected = []
-            for (let i=1; i < households.length+1; i++) {
+            for (let i=1; i < selectedHouseholdsAllInfo.length+1; i++) {
                 tempSelected.push(i)
             }
             setSelectedHouseholds(tempSelected)
@@ -182,7 +184,7 @@ function HouseholdList({ households, setHouseholds, currentEvent, setCurrentEven
                 {selectedHouseholds.length > 0 ? <Button style={{ marginRight: "5px"}} onClick={() => setOcShow(true)}>Distribute to Selected</Button> : null }
                 {offCanvas}
                 {newEventOffCanvas}
-                <Button onClick={() => handleSelectAll()}>{selectedHouseholds.length === households.length ? 'Deselect All' : "Select All"}</Button>
+                <Button onClick={() => handleSelectAll()}>{selectedHouseholds.length === households.filter(household => household.account.user_id === user.id).length ? 'Deselect All Possible' : "Select All Possible"}</Button>
             </div>
             
             <p></p>
