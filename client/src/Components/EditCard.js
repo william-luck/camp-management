@@ -16,7 +16,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import Alert from 'react-bootstrap/Alert';
 
 
-function EditCard({ household, setSelectedHousehold, selectedHousehold, location, newHousehold, user }) {
+function EditCard({ household, setSelectedHousehold, selectedHousehold, location, newHousehold, user, households, householdDeleted, setHouseholdDeleted }) {
 
     const [headOfHHShow, setHeadOfHHShow] = useState(false);
     const [headOfHHConfirm, setHeadOfHHConfirm] = useState(false)
@@ -185,7 +185,9 @@ function EditCard({ household, setSelectedHousehold, selectedHousehold, location
         })
             .then(() => {
                 setHouseholdDeleteConfirm('alert')
-                setTimeout(() => setHouseholdDeleteConfirm('skip'), 6000)
+                setTimeout(() => setHouseholdDeleteConfirm('skip'), 3000)
+                setTimeout(() => setHouseholdDeleted(!householdDeleted), 3000)
+                
             })
 
 

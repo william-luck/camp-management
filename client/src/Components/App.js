@@ -21,6 +21,7 @@ function App() {
   const [households, setHouseholds] = useState([])
   const [currentEvent, setCurrentEvent] = useState(null)
   const [newHousehold, setNewHousehold] = useState(false)
+  const [householdDeleted, setHouseholdDeleted] = useState(false)
   const location = useLocation();
 
   // Checks if already logged-in user on page load
@@ -40,7 +41,7 @@ function App() {
     })
 
       
-  }, [newHousehold])
+  }, [newHousehold, householdDeleted])
 
   if (!user) return <Login setUser={setUser} />
 
@@ -61,7 +62,7 @@ function App() {
             <HouseholdList households={households} setHouseholds={setHouseholds} currentEvent={currentEvent} setCurrentEvent={setCurrentEvent} user={user}/>
           </Route>
           <Route path='/edit-hhs'>
-            <EditHouseholds households={households} location={location} newHousehold={newHousehold} setNewHousehold={setNewHousehold} user={user}/>
+            <EditHouseholds households={households} location={location} newHousehold={newHousehold} setNewHousehold={setNewHousehold} user={user} householdDeleted={householdDeleted} setHouseholdDeleted={setHouseholdDeleted}/>
           </Route>
           <Route path='/add-new-hh'>
             <NewHousehold setNewHousehold={setNewHousehold} location={location} user={user} households={households}/>
