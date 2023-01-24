@@ -81,8 +81,8 @@ function SignUpForm({ setUser }) {
                 <Form.Control type="password" placeholder="Confirm password" value={passwordConfirm} onChange={e => setPasswordConfirm(e.target.value)}/>
             </Form.Group>
 
-            {errors.map(error => <Alert key={error} variant="danger" onClose={() => setErrors([])} dismissible>{error}</Alert>)}
-
+            {/* {errors.map(error => <Alert key={error} variant="danger" onClose={() => setErrors([])} dismissible>{error}</Alert>)} */}
+            {errors.length > 0 ? <Alert variant="danger" onClose={() => setErrors([])} dismissible><ul>{errors.map(error => <li>{error}</li>)}</ul></Alert> : null}
             <Button variant="primary" type="submit">Signup</Button>
         </Form>
             </>
