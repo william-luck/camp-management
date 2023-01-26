@@ -6,6 +6,6 @@ class Household < ApplicationRecord
     has_one :user, through: :account
 
     validates_associated :beneficiaries
-    # validates :address, presence: true
+    validates :address, presence: true
 
 end

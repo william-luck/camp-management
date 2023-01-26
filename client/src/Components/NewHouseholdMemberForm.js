@@ -29,75 +29,10 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
             phone_number: '+964-' + phoneNumber.replace(/[^\d]/g, ''),
             national_id_number: idNumber,
         }
-
-
+        
         return formData;
 
     }
-
-    // function createHouseholdAndAccount() {
-
-
-    //     // This function should create the household, the account, and the beneficiary as head of HH (three seperate post requests, in that order)
-
-    //     let householdCreation = {
-    //         address: address,
-    //         date_of_entry: new Date().toJSON().slice(0, 10)
-    //     }
-
-    //     // First creates a household using the form address and today's date
-    //     fetch(`/households`, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(householdCreation)
-    //     })
-    //         .then(r => r.json())
-    //         .then(createdHousehold => {
-
-
-    //             // then takes the form data and adds the inputted beneficiary as the head of HH, and uses the ID from the househohld created in the previous fetch request
-    //             let newHouseholdData = householdMemberObject()
-    //             newHouseholdData.head_of_HH = true
-    //             newHouseholdData.household_id = createdHousehold.id
-
-    //             fetch(`beneficiaries`, {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     'Content-Type': 'application/json'
-    //                 },
-    //                 body: JSON.stringify(newHouseholdData)
-    //             })
-    //                 .then(r => r.json())
-    //                 .then((createdBeneficiary) => {
-    //                     // then I want to create the account for the beneficiary, 
-
-
-    //                     fetch(`accounts`, {
-    //                         method: 'POST', 
-    //                         headers: {
-    //                             'Content-Type': 'application/json'
-    //                         },
-    //                         body: JSON.stringify({
-    //                             user_id: user.id,
-    //                             household_id: createdHousehold.id, 
-    //                             funds: 0
-    //                         })
-    //                     })
-    //                         .then(r => r.json())
-    //                         .then(newAccount => {
-    //                             setNewHousehold(createdHousehold)
-
-    //                             history.push('/edit-hhs')
-                                
-
-    //                         })
-    //                 })
-                
-    //         })
-    // }
-
 
     function createBeneficiary(e) {
 
@@ -132,83 +67,10 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
         e.preventDefault()
 
         if (location.pathname === '/add-new-hh') {
-            // createHouseholdAndAccount()
-            // newArrival()
             newArrivalAlternate()
         } else {
             createBeneficiary(e)
         }
-
-    }
-
-    function newArrival() {
-
-        let householdCreation = {
-            address: address,
-            date_of_entry: new Date().toJSON().slice(0, 10)
-        }
-
-        fetch('/households', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(householdCreation)
-        })
-            .then(response => {
-                if (response.ok) {
-                    response.json().then(createdHousehold => {
-
-                    // take the data and create beneficiary 
-                    let newBeneficiaryData = householdMemberObject()
-                    newBeneficiaryData.head_of_HH = true
-                    newBeneficiaryData.household_id = createdHousehold.id
-
-                    fetch('/beneficiaries', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(newBeneficiaryData)
-                    })
-                        .then(response => {
-                            if (response.ok) {
-                                response.json().then(createdBeneficiary => {
-                                    // Create the account
-                                    fetch(`accounts`, {
-                                        method: 'POST', 
-                                        headers: {
-                                            'Content-Type': 'application/json'
-                                        },
-                                        body: JSON.stringify({
-                                            user_id: user.id,
-                                            household_id: createdHousehold.id, 
-                                            funds: 0
-                                        })
-                                    })
-                                        .then(response => response.json())
-                                        .then(() => {
-                                            setNewHousehold(createdHousehold)
-                                            history.push('/edit-hhs')
-                                        })
-                                })
-                            } else {
-                                // Add errors to household errors
-                                response.json().then(beneficiaryErrors => {
-                                    setErrors(...errors, beneficiaryErrors.errors)
-                                })
-                            }
-                        })
-                    })
-                } 
-                // else {
-                //     // Error for household address, should only be one array element
-                //     response.json().then(errors => setErrors(errors.errors))
-
-                //     // Do I want to try creating beneficiary anyway? But I need the created household ID to create the beneficiary...
-                    
-                // }
-            })
 
     }
 
@@ -240,11 +102,16 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
                     history.push('/edit-hhs')
                         })
                 } else {
-                    response.json().then(errors => console.log(errors))
+                    response.json().then(errors => {
+                        if (errors.errors.includes('Household must exist')) {
+                            let index = errors.errors.indexOf('Household must exist')
+                            errors.errors.splice(index, 1)
+                            errors.errors.push("Address can't be blank")
+                            setErrors(errors.errors)
+                        }
+                    })
                 }
             })
-            
-
     }
 
     function clearFormData(e) {
