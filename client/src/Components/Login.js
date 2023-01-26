@@ -48,7 +48,9 @@ function Login({ setUser}) {
     return (
         <>
         <Container>
-        <div><h3>{showLogin ? 'Log in' : 'Sign up'}</h3></div>
+        <div style={{display: 'inline-block'}}><h3>{showLogin ? 'Log in' : 'Sign up'}</h3></div>
+        {' '}
+        {!showLogin ? <Button variant="link" size="sm" style={{display: 'inline-block'}} onClick={() => setShowLogin(true)}>Back to Login </Button> : null}
         {showLogin ? 
              <Form onSubmit={e => handleSubmit(e)}>
              <Form.Group className="mb-3">

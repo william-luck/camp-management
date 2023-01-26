@@ -18,7 +18,7 @@ end
 
 # Create one user (camp manager)
 User.create(username: 'camp_manager', password: 'test_password', email: 'management@management.com', district: 'Dahuk', governorate: 'Dahuk')
-User.create(username: 'camp_manager2', password: 'test_password', email: 'management@management.com', district: 'Dahuk', governorate: 'Dahuk')
+User.create(username: 'camp_manager2', password: 'test_password', email: 'management_alternate@management.com', district: 'Dahuk', governorate: 'Dahuk')
 
 10.times do |count|
     Event.create(date: generate_distribution_date(count))

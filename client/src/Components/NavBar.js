@@ -10,7 +10,7 @@ function NavBar({ location }) {
     
     return (
         <>
-        <Nav fill className="flex-column" variant="pills" activeKey={location.pathname}>
+        <Nav fill className="flex-column" variant="pills" defaultActiveKey="/home" activeKey={location.pathname}>
         <Nav.Item>
         <Nav.Link to="/home" as={Link} eventKey="/home">Distrisbute to HHs</Nav.Link>
         </Nav.Item>

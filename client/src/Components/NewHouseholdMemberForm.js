@@ -29,7 +29,7 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
             phone_number: '+964-' + phoneNumber.replace(/[^\d]/g, ''),
             national_id_number: idNumber,
         }
-        
+
         return formData;
 
     }
