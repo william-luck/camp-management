@@ -19,8 +19,21 @@ class HouseholdsController < ApplicationController
     end
 
     def create
-        household = Household.create!(household_params)
+        # byebug
+        # If something in the params matches add new HH, go through all three, but if not, just create the beneficiary as normal
+        household = Household.create(household_params)
+
+        beneficiary = Beneficiary.new(beneficiary_params)
+        beneficiary.household_id = household.id
+        beneficiary.save!
+
+        account = Account.create(user_id: params[:user_id], household_id: household.id, funds: 0)
+
         render json: household, status: :created
+
+        # Normal for create household..... Seperate from beneficiary controller. The only time that we are creating the household is when adding new beneficiary to go along with it too.. 
+        # household = Household.create!(household_params)
+        # render json: household, status: :created
     end
 
     def destroy
@@ -33,6 +46,10 @@ class HouseholdsController < ApplicationController
 
     def household_params
         params.permit(:address, :date_of_entry)
+    end
+
+    def beneficiary_params
+        params.permit(:name, :gender, :DOB, :phone_number, :national_id_number, :head_of_HH)
     end
 
     def render_invalid_data_error(invalid)

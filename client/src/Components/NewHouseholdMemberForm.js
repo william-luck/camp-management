@@ -133,7 +133,8 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
 
         if (location.pathname === '/add-new-hh') {
             // createHouseholdAndAccount()
-            newArrival()
+            // newArrival()
+            newArrivalAlternate()
         } else {
             createBeneficiary(e)
         }
@@ -208,6 +209,41 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
                     
                 // }
             })
+
+    }
+
+    function newArrivalAlternate() {
+
+        let formData = {
+            name:  firstName + ' ' + lastName,
+            gender: gender,
+            DOB: dateOfBirth,
+            phone_number: '+964-' + phoneNumber.replace(/[^\d]/g, ''),
+            national_id_number: idNumber,
+            address: address,
+            date_of_entry: new Date().toJSON().slice(0, 10),
+            head_of_HH: true,
+            user_id: user.id
+        }
+
+        fetch('/households', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => {
+                if (response.ok) {
+                    response.json().then(createdHousehold => {
+                    setNewHousehold(createdHousehold)
+                    history.push('/edit-hhs')
+                        })
+                } else {
+                    response.json().then(errors => console.log(errors))
+                }
+            })
+            
 
     }
 
