@@ -22,7 +22,7 @@ This project is also available at [https://camp-management.onrender.com/](https:
 
 ## Description and Features
 
-![enter image description here](https://im.ezgif.com/tmp/ezgif-1-507d347141.gif)
+![enter image description here](https://s9.gifyu.com/images/video1665591513.gif)
 
 This application imagines a software for management of an Internally Displaced Persons (IDP) Camp, where the user can conduct cash distributions by depositing funds into a household's (family) account, edit existing households, and add new households and beneficiaries (individual recipients who belong to households).
 
