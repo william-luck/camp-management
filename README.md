@@ -13,7 +13,7 @@ Two users are created by default during seeding. Their default logins are:
 **Username**: camp_manager
 **Password:** test_password
 
-**Username**: camp_manager
+**Username**: camp_manager2
 **Password:** test_password
 
 The user can also sign up upon starting the application. However, the user will not be able to conduct distributions, only add/edit new households. 
