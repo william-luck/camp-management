@@ -109,6 +109,7 @@ function NewHouseholdMemberForm({ household, addNewHouseholdMember, setAddNewHou
                             errors.errors.push("Address can't be blank")
                             setErrors(errors.errors)
                         }
+                        setErrors(errors.errors)
                     })
                 }
             })
