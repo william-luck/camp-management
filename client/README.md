@@ -1,70 +1,49 @@
-# Getting Started with Create React App
+## Installation
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+To start this application, fork and clone this repository. Begin by typing  `bundle install`  in the console. Then input the following commands in the console:
 
-## Available Scripts
+-   `rails db:migrate`
+-   `rails db:seed`
+-   `rails server`
 
-In the project directory, you can run:
+Keep the server running in a separate console session. Type  `npm install`  and  `npm start --prefix client`  in the console to start the application.
 
-### `npm start`
+Two users are created by default during seeding. Their default logins are: 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**Username**: camp_manager
+**Password:** test_password
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+**Username**: camp_manager
+**Password:** test_password
 
-### `npm test`
+The user can also sign up upon starting the application. However, the user will not be able to conduct distributions, only add/edit new households. 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Description and Features
 
-### `npm run build`
+![enter image description here](https://im.ezgif.com/tmp/ezgif-1-507d347141.gif)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+This application imagines a software for management of an Internally Displaced Persons (IDP) Camp, where the user can conduct cash distributions by depositing funds into a household's (family) account, edit existing households, and add new households and beneficiaries (individual recipients who belong to households).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Distributions to Households
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Upon starting the application and after login, the user can either distribute cash to individual households, or distribute cash to multiple selected households through the check boxes and select all functionality. The default distribution value is 12,000 Iraqi Dinar (IQD -  approximately $8.28 USD) per beneficiary in each household. This mimics current standard World Food Programme distribution amounts in IDP camps across Iraq. The user can change the distribution amount, and there is no maximum or minimum amounts to be distributed. 
 
-### `npm run eject`
+When using the select all functionality, only the households that the user is responsible for will be selected. By default, the first 10 households belong to user 1 (camp_manager), and the last 10 households (camp_manager2) belong to user 2 (camp_manager2). Try logging out and logging in under the other user for a demonstration on functionality. New users that are created through the sign up form will see that they are unable to distribute to any of the existing 20 households. However, the new user can choose to create a new household under the new household arrival tab. 
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Each set of distributions are grouped under a distribution event, which mimics monthly distributions in IDP camps. By default, the user distributes cash under Distribution 11. Creating a new distribution event will clear account funds, and push any new distributions into Distribution 12. This was done to demonstrate a many-to-many relationship between accounts and distribution events. An account has many distributions, and an account has many distribution events, through those individual distribution transactions, and vice versa. 
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Editing Households
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Similar permissions are in place for the edit household tab, in that the user can only edit information among the households they are responsible for. In the edit tab, the user can change the head of household through a dropdown menu of other beneficiaries in the household, edit the address, and edit phone numbers and national ID numbers of individual beneficiaries in the household. The user can also choose to add or remove a beneficiary to the household. Users are not permitted to delete the head of household from the family, and will be prevented from doing so with front-end disabled buttons. If the user wants to delete the head of household, the user must first reassign the head of household position before deleting the beneficiary. The user can also choose to remove the household from the camp, which will delete all associated beneficiaries from the database. 
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## New Household Arrival
 
-## Learn More
+Users can add a household to the camp, and must first add a beneficiary to begin the process. The same form and component are used to add this first beneficiary to the household as adding a new beneficiary under the edit households tab, but another form field is included to record the address of the household in the camp. Default addresses include a two-digit tent number, followed by a camp sector letter designation. 
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Upon form submission, the back-end creates the household, creates the beneficiary to be assigned as the head of the newly-created household, and creates an account to receive distributions. The user is pushed to the edit households tab where the user can add additional household members, as necessary. Newly created households are assigned to the user logged in at the time of creation. 
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Validations are present for both adding a beneficiary and household. All fields must exist, the phone number must be a valid 10-digit phone number (excluding the +964- country code), and national ID numbers must be nine characters. 
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## ERD
+![enter image description here](https://imgtr.ee/images/2023/01/28/G56H2.png)
