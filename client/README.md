@@ -18,6 +18,8 @@ Two users are created by default during seeding. Their default logins are:
 
 The user can also sign up upon starting the application. However, the user will not be able to conduct distributions, only add/edit new households. 
 
+This project is also available at [https://camp-management.onrender.com/](https://camp-management.onrender.com/)
+
 ## Description and Features
 
 ![enter image description here](https://im.ezgif.com/tmp/ezgif-1-507d347141.gif)
