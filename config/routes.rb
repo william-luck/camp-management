@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resources :distributions, only: [:index, :create]
   resources :accounts, only: [:index, :update, :create]
   resources :households
-  resources :beneficiaries, only: [:create, :update, :destroy]
+  resources :beneficiaries, only: [:create, :show, :update, :destroy]
 
   post '/login', to: 'sessions#create'
   get '/me', to: 'users#show'

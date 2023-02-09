@@ -28,6 +28,17 @@ function HouseholdList({ households, setHouseholds, currentEvent, setCurrentEven
     const [alertShow, setAlertShow] = useState(false)
     const [newDistributionEventAlertShow, setNewDistributionEventAlertShow] = useState(false)
 
+    const [householdMatchingID, setHouseholdMatchingID] = useState('')
+    const [error, setError] = useState([])
+
+    useEffect(() => {
+        
+    }, [])
+    
+    
+
+
+
     
 
     function handleSelectAll() {
@@ -100,12 +111,30 @@ function HouseholdList({ households, setHouseholds, currentEvent, setCurrentEven
         })
             .then(r => r.json())
             .then(() => setCurrentEvent(currentEvent+1))
-        // Set the state value of the current event plus one
-
-        // Display an alert message (popup?) of what creating a new event will do 
-
-        // Then, set all account funds to zero, not quite sure how to do this. 
     }
+
+    function searchNationalIdNumber(e) {
+
+
+        if (e.target.value.length === 9) {
+            fetch(`beneficiaries/${e.target.value}`)
+                .then(response => {
+                    if (response.ok) {
+                        response.json().then((matchingBeneficiary) => {
+                            setHouseholdMatchingID(households.filter(household => household.beneficiaries.find(beneficiary => beneficiary.national_id_number === matchingBeneficiary.national_id_number) !== undefined))
+                        })
+                    } else {
+                        response.json().then(message => setError(message))
+                    }
+                })
+        } else {
+            setHouseholdMatchingID('')
+            setError('')
+        }     
+    }
+
+
+        
 
     const offCanvas = (
         <Offcanvas show={ocShow} onHide={() => setOcShow(false)} placement='bottom'>
@@ -169,6 +198,8 @@ function HouseholdList({ households, setHouseholds, currentEvent, setCurrentEven
         </Alert>
     )
 
+    
+
 
 
     return (
@@ -184,16 +215,19 @@ function HouseholdList({ households, setHouseholds, currentEvent, setCurrentEven
                 {selectedHouseholds.length > 0 ? <Button style={{ marginRight: "5px"}} onClick={() => setOcShow(true)}>Distribute to Selected</Button> : null }
                 {offCanvas}
                 {newEventOffCanvas}
-                <Button onClick={() => handleSelectAll()}>{selectedHouseholds.length === households.filter(household => household.account.user_id === user.id).length ? 'Deselect All Possible' : "Select All Possible"}</Button>
+                <Button  onClick={() => handleSelectAll()}>{selectedHouseholds.length === households.filter(household => household.account.user_id === user.id).length ? 'Deselect All Possible' : "Select All Possible"}</Button>
             </div>
+            <Form><Form.Control placeholder="Search by national ID number.."  onChange={(e) => searchNationalIdNumber(e)} style={{display: "inline-block"}}/></Form>
             
             <p></p>
             {alertShow ? <SuccessAlert setAlertShow={setAlertShow} distributionAmount={distributionAmount} distributionEvent={distributionEvent} households={households}/> : null}
             {newDistributionEventAlertShow ? newDistributionEventAlert : null}
+            {error ? <p>{error}</p> : null}
 
             <div style={{maxHeight: '725px', overflowY: 'scroll'}}>
             <Form>
-            {households.map(household => {
+            {!householdMatchingID ?   
+            households.map(household => {
                 return (
                 <HouseholdCard 
                     key={household.id} 
@@ -207,7 +241,24 @@ function HouseholdList({ households, setHouseholds, currentEvent, setCurrentEven
                     user={user}
                 />
                 )
-            })}
+            }) : 
+            householdMatchingID.map(household => {
+                return (
+                <HouseholdCard 
+                    key={household.id} 
+                    household={household} 
+                    selectedHouseholds={selectedHouseholds} 
+                    setSelectedHouseholds={setSelectedHouseholds}
+                    alertShow={alertShow}
+                    multipleDistributionAmount={distributionAmount}
+                    distributionEvent={distributionEvent}
+                    currentEvent={currentEvent}
+                    user={user}
+                />
+                )
+
+            })
+            } 
             </Form>
             </div>
         </Container>

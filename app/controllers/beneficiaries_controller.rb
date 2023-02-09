@@ -2,6 +2,15 @@ class BeneficiariesController < ApplicationController
 
     rescue_from ActiveRecord::RecordInvalid, with: :render_invalid_data_error
 
+    def show
+        beneficiary = Beneficiary.find_by!(national_id_number: params[:id])
+        render json: beneficiary, status: :ok
+    rescue ActiveRecord::RecordNotFound
+        render json: ['Beneficiary not found'], status: :not_found
+        
+        
+    end
+
     def create
         beneficiary = Beneficiary.create!(beneficiary_params)
         render json: beneficiary, status: :created
