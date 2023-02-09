@@ -7,8 +7,12 @@ class AccountsController < ApplicationController
 
     def update
         account = Account.find(params[:id])
-        account.update!(account_params)
-        render json: account, status: :accepted
+        if session[:id] == account.user.id
+            account.update!(account_params)
+            render json: account, status: :accepted
+        else
+            render json: ["You must be responsible for this account to update information"]
+        end
     end
 
     def create

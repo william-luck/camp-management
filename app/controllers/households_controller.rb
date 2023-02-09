@@ -14,13 +14,16 @@ class HouseholdsController < ApplicationController
 
     def update
         household = Household.find(params[:id])
-        household.update!(household_params)
-        render json: household, status: :accepted
+        if household.user.id == session[:user_id]
+            household.update!(household_params)
+            render json: household, status: :accepted
+        else
+            render json: ['You must be responsible for this household to update information']
+        end
     end
 
     def create
-        # byebug
-        # If something in the params matches add new HH, go through all three, but if not, just create the beneficiary as normal
+
         household = Household.create(household_params)
 
         beneficiary = Beneficiary.new(beneficiary_params)
@@ -31,15 +34,17 @@ class HouseholdsController < ApplicationController
 
         render json: household, status: :created
 
-        # Normal for create household..... Seperate from beneficiary controller. The only time that we are creating the household is when adding new beneficiary to go along with it too.. 
-        # household = Household.create!(household_params)
-        # render json: household, status: :created
     end
 
     def destroy
+
         household = Household.find(params[:id])
-        household.destroy
-        head :no_content
+        if session[:user_id] == household.user.id
+            household.destroy
+            head :no_content
+        else
+            render json: ['You must own this household to delete']
+        end
     end
 
     private

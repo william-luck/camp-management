@@ -95,7 +95,7 @@ function EditCard({ household, setSelectedHousehold, selectedHousehold, location
                 .then(changedBeneficiary=> {
                     setHeadOfHHShow(false)
                     console.log(changedBeneficiary)
-                    // For rendering change on page
+                    // For rendering change o page
                     household.beneficiaries.find(beneficiary => beneficiary.id === changedBeneficiary.id).head_of_HH = true
                     return changedBeneficiary
                 })
